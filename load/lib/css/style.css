@@ -1,0 +1,72 @@
+body {
+	font-family: Verdana, Arial, Helvetica, Futura, sans-serif;
+	font-size: 1em;
+	padding:0;
+	margin:0;
+}
+
+#appHeader{
+/*	background-image: url('../img/header.png');
+	background-repeat: no-repeat;
+	background-position: left;*/
+}
+
+#mainContainer{
+    background-color: #33E4FA
+}
+
+#welcome{
+    font-family : "Tahoma";
+    font-size   : 28px !important;
+    text-align  : center;
+    margin-top  : 120px;
+    text-shadow : 1px 1px 1px #FFFFFF;
+    color       : #006BA4;
+    background-image    : url('../img/logo.png');
+    background-repeat   : no-repeat;
+    background-position : center;
+    height: 300px;   
+}
+
+/*
+ * Icon Block
+ */
+.icon-home { background-image: url(../img/home.png) !important; }
+.icon-logout { background-image: url(../img/logout.png) !important; }
+.icon-username { background-image: url(../img/username.png) !important; }
+.icon-menu { background-image: url(../img/menu.png) !important; }
+.icon-menu2 { background-image: url(../img/menu2.png) !important; }
+.icon-header { background-image: url(../img/header.png) !important; }
+.icon-pencil { background-image: url(../img/pencil.png) !important; }
+.icon-clock { background-image: url(../img/clock.png) !important; }
+.icon-calendar { background-image: url(../img/calendar.png) !important; }
+.icon-password { background-image: url(../img/password.png) !important; }
+.icon-gear { background-image: url(../img/gear.png) !important; }
+.icon-user { background-image: url(../img/user.png) !important; }
+.icon-save { background-image: url(../img/save.png) !important; }
+.icon-edit { background-image: url(../img/edit.png) !important; }
+.icon-delete { background-image: url(../img/delete.png) !important; }
+.icon-refresh { background-image: url(../img/refresh.png) !important; }
+.icon-excel { background-image: url(../img/excel.png) !important; }
+.icon-form { background-image: url(../img/form.png) !important; }
+.icon-grid { background-image: url(../img/grid.png) !important; }
+.icon-role { background-image: url(../img/role.png) !important; }
+.icon-master { background-image: url(../img/database_refresh.png) !important; }
+.icon-kecamatan { background-image: url(../img/map_clipboard.png) !important; }
+.icon-desa { background-image: url(../img/map.png) !important; }
+.icon-dept { background-image: url(../img/award_star_bronze_2.png) !important; }
+.icon-hr { background-image: url(../img/building.png) !important; }
+.icon-sect { background-image: url(../img/chart_organisation.png) !important; }
+.icon-joblevel { background-image: url(../img/computer_off.png) !important; }
+.icon-jobname { background-image: url(../img/award_star_silver_3.png) !important; }
+.icon-harikerja { background-image: url(../img/calendar_star.png) !important; }
+.icon-shiftkerja { background-image: url(../img/computer_off.png) !important; }
+.icon-jamkerja { background-image: url(../img/clock.png) !important; }
+.icon-op { background-image: url(../img/color_swatch.png) !important; }
+.icon-pa { background-image: url(../img/ipod_cast.png) !important; }
+.icon-pay { background-image: url(../img/money.png) !important; }
+.icon-dt { background-image: url(../img/database.png) !important; }
+.icon-kab { background-image: url(../img/page_white_go.png) !important; }
+.icon-prov { background-image: url(../img/page_white_go.png) !important; }
+.icon-profile { background-image: url(../img/user_suit.png) !important; }
+.icon-pip { background-image: url(../img/pip.png) !important; }
