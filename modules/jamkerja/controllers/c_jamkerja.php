@@ -15,8 +15,8 @@ class C_jamkerja extends IAN_Controller{
 	}
 
 	public function getJamkerja(){
-        $start      = ($this->input->get('start', TRUE) ? $this->input->get('start', TRUE) : 0);
-        $limit      = ($this->input->get('limit', TRUE) ? $this->input->get('limit', TRUE) : 20);
+        $start      = ($this->input->post('start', TRUE) ? $this->input->post('start', TRUE) : 0);
+        $limit      = ($this->input->post('limit', TRUE) ? $this->input->post('limit', TRUE) : 20);
 		
 		$result 		= $this->m_jamkerja->getGridJamkerja($start, $limit);
 		$resultCount 	= $this->m_jamkerja->countGridJamkerja();

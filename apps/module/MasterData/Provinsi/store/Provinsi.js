@@ -7,6 +7,7 @@ Ext.define('SMS.module.MasterData.Provinsi.store.Provinsi', {
     autoLoad    : true,
     autoSync    : false,
     pageSize    : 20,
+    remoteFilter: true,
     root        : {
         expanded    : false
     },

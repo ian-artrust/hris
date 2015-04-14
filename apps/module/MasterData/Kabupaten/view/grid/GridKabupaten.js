@@ -7,7 +7,7 @@ Ext.define('SMS.module.MasterData.Kabupaten.view.grid.GridKabupaten', {
     id       : 'gridkabupaten',
     border   : true,
     frame    : true,
-        margins     : '3px', 
+    margins     : '3px', 
     selModel: {
         selType     : 'checkboxmodel',
         mode        : 'SINGLE',
