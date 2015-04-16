@@ -1,6 +1,6 @@
 Ext.define('SMS.module.Employee.Profile.view.grid.GridProfile', {
     extend   : 'Ext.grid.Panel',
-    // store    : 'SMS.module.Employee.Profile.store.Profile',
+    store    : 'SMS.module.Employee.Profile.store.Profile',
     title    : 'Grid Profile',
     iconCls  : 'icon-grid',
     alias    : 'widget.gridprofile',
@@ -17,14 +17,14 @@ Ext.define('SMS.module.Employee.Profile.view.grid.GridProfile', {
     },
     dockedItems: [{
         xtype       : 'pagingtoolbar',
-        // store       : 'SMS.module.Employee.Profile.store.Profile',
+        store       : 'SMS.module.Employee.Profile.store.Profile',
         dock        : 'bottom'
     }], 
     columns  : [
         {
             text    : 'No',
             xtype   : 'rownumberer',
-            width   : '10%'
+            width   : '15%'
         },
         {
             text     : 'NIK',
@@ -34,7 +34,7 @@ Ext.define('SMS.module.Employee.Profile.view.grid.GridProfile', {
         {
             text     : 'Nama Lengkap',
             dataIndex: 'nama_lengkap',
-            width    : '55%'
+            width    : '40%'
         }
     ],
     tbar: [

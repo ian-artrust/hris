@@ -15,7 +15,7 @@ Ext.define('SMS.module.Employee.Profile.controller.Profile', {
             "formprofile button[action=save]"        : {
                 click: me.save
             }, 
-            "formprofile button[action=reset]"       : {
+            "biography button[action=reset]"       : {
                 click: me.reset
             },
             "griddepartmentorg"                          : {
@@ -113,8 +113,10 @@ Ext.define('SMS.module.Employee.Profile.controller.Profile', {
 
     reset: function(btn, gridPanel, selected) {//Reset Form
         var me = this;
-        var form = Ext.getCmp('formdepartment');
-        var grid = Ext.getCmp('griddepartment');
+        var form = Ext.getCmp('biography');
+        var grid = Ext.getCmp('gridprofile');
+        var pic     = form.queryById('imagePreview');
+        pic.setSrc('');
         form.getForm().reset();
 
         if(createProfile == false){

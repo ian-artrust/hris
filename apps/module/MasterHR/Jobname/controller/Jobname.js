@@ -87,12 +87,20 @@ Ext.define('SMS.module.MasterHR.Jobname.controller.Jobname', {
                                     msg             : 'Data Digunakan di Table Lain',
                                     icon            : Ext.MessageBox.INFO,
                                     buttons         : Ext.MessageBox.OK
-                                });                             
+                                });
+                                var form    = Ext.getCmp('formjobname');
+                                var grid    = Ext.getCmp('gridjobname');
+                                form.getForm().reset();
+                                me.resetPanel();
+                                grid.getSelectionModel().deselectAll();
+                                Ext.ComponentQuery.query('#gridjobname')[0].getStore('SMS.module.MasterHR.Jobname.store.Jobname').reload();                             
                             } else {
-                                var storeApproval = Ext.getStore('SMS.module.MasterHR.Jobname.store.Jobname');
-                                storeApproval.removeAll();
-                                storeApproval.add(data.data);
-                                Ext.getCmp('formjobname').getForm().reset();
+                                var form    = Ext.getCmp('formjobname');
+                                var grid    = Ext.getCmp('gridjobname');
+                                form.getForm().reset();
+                                me.resetPanel();
+                                grid.getSelectionModel().deselectAll();
+                                Ext.ComponentQuery.query('#gridjobname')[0].getStore('SMS.module.MasterHR.Jobname.store.Jobname').reload();
                             }
                         }
                     });
@@ -124,22 +132,20 @@ Ext.define('SMS.module.MasterHR.Jobname.controller.Jobname', {
     save: function(btn, evt, opts){
         var me               = this;
         var form             = btn.up('form').getForm();
-        var name_dept        = form.findField('name_dept').getValue();
-        var name_sect        = form.findField('name_sect').getValue();
-        var name_joblevel    = form.findField('name_joblevel').getValue();
-        var name_jobname     = form.findField('name_jobname').getValue();
-        var active         = form.findField('active').getValue();
+        var id_sect          = form.findField('id_sect').getValue();
+        var id_joblevel      = form.findField('id_joblevel').getValue();
+        var jobname          = form.findField('jobname').getValue();
+        var active           = form.findField('active').getValue();
         // console.log(role);
 
         Ext.Ajax.request({
             url     : BASE_URL + 'jobname/c_jobname/saveJobname',
             method  : 'POST',
             params  : {
-                name_dept        : name_dept,
-                name_sect        : name_sect,
-                name_jobelevel   : name_jobelevel,
-                name_jobname     : name_jobname,
-                active           : active
+                id_sect        : id_sect,
+                id_joblevel    : id_joblevel,
+                jobname        : jobname,
+                active         : active
             },
             success : function(response){
                 var data    = Ext.JSON.decode(response.responseText);
@@ -185,10 +191,9 @@ Ext.define('SMS.module.MasterHR.Jobname.controller.Jobname', {
         var form            = btn.up('form').getForm();
                 // console.log(form);
         var id              = form.findField('id').getValue();
-        var name_dept       = form.findField('name_dept').getValue();
-        var name_sect       = form.findField('name_sect').getValue();
-        var name_joblevel   = form.findField('name_joblevel').getValue();
-        var name_jobname    = form.findField('name_jobname').getValue();
+        var id_sect         = form.findField('id_sect').getValue();
+        var id_joblevel     = form.findField('id_joblevel').getValue();
+        var jobname         = form.findField('jobname').getValue();
         var active          = form.findField('active').getValue();
 // console.log(role);
         Ext.MessageBox.show({
@@ -204,11 +209,10 @@ Ext.define('SMS.module.MasterHR.Jobname.controller.Jobname', {
                         method  : 'POST',
                         params  : {
                             id              : id,
-                            name_dept       : name_dept,
-                            name_sect       : name_sect,
-                            name_joblevel   : name_joblevel,
-                            name_jobname    : name_jobname,
-                            isactive        : active
+                            id_sect       : id_sect,
+                            id_joblevel   : id_joblevel,
+                            jobname         : jobname,
+                            active          : active
                         },
                         success : function(response){
                             var data    = Ext.JSON.decode(response.responseText);

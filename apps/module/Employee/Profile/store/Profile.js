@@ -13,7 +13,7 @@ Ext.define('SMS.module.Employee.Profile.store.Profile', {
     proxy       : {
         type            : 'ajax',
         api             : {
-            read    : BASE_URL + 'profile/c_dept/getProfile'
+            read    : BASE_URL + 'profile/c_profile/getProfile'
         },
         actionMethods   : {
             read    : 'POST'

@@ -96,7 +96,7 @@ Ext.define('SMS.view.Menu',{
 /**
  * @class SMSIA Viewport
  * @extends Container Viewport
- * Copyright PT. ART MEDIA INDONESIA 
+ * Copyright Ardian Webi Kirda 
  */
 Ext.define('SMS.view.Viewport', {
     extend 		: 'Ext.container.Viewport',
@@ -147,7 +147,7 @@ Ext.define('SMS.view.Viewport', {
                         '-',
                         {
                             id          : 'datestamp',
-                            text        : '01-01-1970',
+                            text        :   '01-01-197',
                             enabled    : true
                         },
                         '-',

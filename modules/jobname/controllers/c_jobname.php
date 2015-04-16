@@ -25,14 +25,16 @@ class C_jobname extends IAN_Controller{
 		foreach ($result->result() as $key => $value) {
 			$data['data'][]=array(
 				'id' 			=> $value->id,
-				'id_joblevel'	=> $value->id_joblevel,
 				'id_sect' 		=> $value->id_sect,
-				'name_joblevel'	=> $value->name_joblevel,
+				'id_joblevel'	=> $value->id_joblevel,
 				'name_sect'		=> $value->name_sect,
+				'name_joblevel'	=> $value->name_joblevel,
 				'jobname' 		=> $value->jobname,
 				'active'		=> $value->active
 			);
 		}
+
+
 
 		$data['total'] 		= $count;
 		$data['success']	= true;
@@ -55,20 +57,21 @@ class C_jobname extends IAN_Controller{
 	}
 
 	public function saveJobname(){
-		$uuid       = $this->m_jobname->getUUID();
-		$id_dept    = ($this->input->post('id_dept', TRUE) ? $this->input->post('id_dept', TRUE) : '');
-		$name_sect  = ($this->input->post('name_sect', TRUE) ? $this->input->post('name_sect', TRUE) : '');
-		$active = ($this->input->post('active', TRUE) ? $this->input->post('active', TRUE) : '');
+		$uuid      	 	= $this->m_jobname->getUUID();
+		$id_sect    	= ($this->input->post('id_sect', TRUE) ? $this->input->post('id_sect', TRUE) : '');
+		$id_joblevel   	= ($this->input->post('id_joblevel', TRUE) ? $this->input->post('id_joblevel', TRUE) : '');
+		$jobname 		= ($this->input->post('jobname', TRUE) ? $this->input->post('jobname', TRUE) : '');
+		$active 		= ($this->input->post('active', TRUE) ? $this->input->post('active', TRUE) : '');
     	if($active == TRUE) { 
     		$active = 'Y'; 
     	} else { 
     		$active = 'N'; 
     	}
 
-    	if(empty($name_sect)){
+    	if(empty($jobname)){
     		$success = 3;
-    	} elseif($this->m_jobname->cekData($name_sect) == 0){
-    		$this->m_jobname->saveJobname($uuid, $id_dept, $name_sect, $active);
+    	} elseif($this->m_jobname->cekData($jobname) == 0){
+    		$this->m_jobname->saveJobname($uuid, $id_sect, $id_joblevel, $jobname, $active);
     		$success = 1;
     	} else {
     		$success = 2;
@@ -80,20 +83,21 @@ class C_jobname extends IAN_Controller{
 	}
 
 	public function editJobname(){
-		$id 		= ($this->input->post('id', TRUE) ? $this->input->post('id', TRUE) : '');
-		$id_dept    = ($this->input->post('id_dept', TRUE) ? $this->input->post('id_dept', TRUE) : '');
-		$name_sect  = ($this->input->post('name_sect', TRUE) ? $this->input->post('name_sect', TRUE) : '');
-		$active 	= ($this->input->post('active', TRUE) ? $this->input->post('active', TRUE) : '');
+		$id 			= ($this->input->post('id', TRUE) ? $this->input->post('id', TRUE) : '');
+		$id_sect  		= ($this->input->post('id_sect', TRUE) ? $this->input->post('id_sect', TRUE) : '');
+		$id_joblevel   	= ($this->input->post('id_joblevel', TRUE) ? $this->input->post('id_joblevel', TRUE) : '');
+		$jobname 		= ($this->input->post('jobname', TRUE) ? $this->input->post('jobname', TRUE) : '');
+		$active 		= ($this->input->post('active', TRUE) ? $this->input->post('active', TRUE) : '');
 		if($active == TRUE) { 
     		$active = 'Y'; 
     	} else { 
     		$active = 'N'; 
     	}
 
-    	if(empty($name_sect)){
+    	if(empty($jobname)){
     		$success = 2;
     	} else {
-    		$this->m_jobname->updateJobname($id, $id_dept, $name_sect, $active);
+    		$this->m_jobname->updateJobname($id, $id_sect, $id_joblevel, $jobname, $active);
     		$success = 1;
     	}
 
@@ -109,10 +113,10 @@ class C_jobname extends IAN_Controller{
     	foreach ($result->result() as $key => $value) {
 			$data['data'][]=array(
 				'id' 			=> $value->id,
-				'id_joblevel'	=> $value->id_joblevel,
 				'id_sect' 		=> $value->id_sect,
-				'name_joblevel'	=> $value->name_joblevel,
+				'id_joblevel'	=> $value->id_joblevel,
 				'name_sect'		=> $value->name_sect,
+				'name_joblevel'	=> $value->name_joblevel,
 				'jobname' 		=> $value->jobname,
 				'active'		=> $value->active
 			);

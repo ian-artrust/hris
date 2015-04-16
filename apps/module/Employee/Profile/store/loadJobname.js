@@ -1,4 +1,4 @@
-Ext.define('SMS.module.MasterHR.Jobname.store.Jobname', {
+Ext.define('SMS.module.Employee.Profile.store.loadJobname', {
     extend      : 'Ext.data.Store',
     model       : 'SMS.module.MasterHR.Jobname.model.Jobname',
     requires    : [
@@ -14,7 +14,7 @@ Ext.define('SMS.module.MasterHR.Jobname.store.Jobname', {
     proxy       : {
         type            : 'ajax',
         api             : {
-            read    : BASE_URL + 'jobname/c_jobname/getJobname'
+            read    : BASE_URL + 'jobname/c_jobname/searchJobname'
         },
         actionMethods   : {
             read    : 'POST'

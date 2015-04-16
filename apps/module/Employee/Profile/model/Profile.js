@@ -14,6 +14,10 @@ Ext.define('SMS.module.Employee.Profile.model.Profile', {
             type    : 'string'
         },
         {
+            name    : 'jobname',
+            type    : 'string'
+        },
+        {
             name    : 'nama_lengkap',
             type    : 'string'
         },
@@ -22,7 +26,7 @@ Ext.define('SMS.module.Employee.Profile.model.Profile', {
             type    : 'string'
         },
         {
-            name    : 'tglahir',
+            name    : 'tgl_lahir',
             type    : 'date',
             dateFormat : 'c'
         },

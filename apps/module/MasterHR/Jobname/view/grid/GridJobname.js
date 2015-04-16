@@ -33,7 +33,7 @@ Ext.define('SMS.module.MasterHR.Jobname.view.grid.GridJobname', {
         },
         {
             text     : 'Job Name',
-            dataIndex: 'name_jobname',
+            dataIndex: 'jobname',
             width    : '40%'
         }
     ],
