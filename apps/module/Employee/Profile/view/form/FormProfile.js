@@ -1,12 +1,12 @@
 Ext.define('SMS.module.Employee.Profile.view.form.FormProfile', {
     extend      : 'Ext.form.Panel',
-    // store       : 'SMS.module.Employee.Profile.store.Profile',
-    // requires    : ['SMS.module.Employee.Profile.store.Profile'],
+    store       : 'SMS.module.Employee.Profile.store.Profile',
+    requires    : ['SMS.module.Employee.Profile.store.Profile'],
     alias       : 'widget.formprofile',
     id          : 'formprofile',
     layout      : 'fit',
     border      : false,
-    // frame       : true,
+    frame       : true,
     margins     : '3px',
     initComponent: function() {
         var me = this;
@@ -184,6 +184,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
             items   : [
                 {
                     columnWidth : .23,
+                    frame       : true,
                     items       : [
                         {
                             xtype   : 'image',
@@ -209,15 +210,31 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
                             items   : [
                                 {
                                     xtype       : 'textfield',
+                                    name        : 'id',
+                                    hidden      : true,
+                                    fieldLabel  : 'ID',                    
+                                },
+                                {
+                                    xtype       : 'textfield',
                                     fieldLabel  : 'Nama Lengkap',
                                     name        : 'nama_lengkap',
-                                    emptyText   : 'Masukan Nama Lengkap Karyawan',
+                                    emptyText   : 'Masukan Nama Lengkap',
                                     labelWidth  : 85,
                                     margins     : '2px 2px 2px 2px',
-                                    allowBlank  : false,
+                                    allowBlank  : true,
                                     msgTarget   : 'under',
                                     minLength   : 4,
-                                    flex        : 1
+                                    flex        : 1.2
+                                },
+                                {
+                                    xtype       : 'textfield',
+                                    name        : 'phone',
+                                    emptyText   : 'Masukan Nomor Handphone',
+                                    margins     : '2px 2px 2px 2px',
+                                    allowBlank  : true,
+                                    msgTarget   : 'under',
+                                    minLength   : 4,
+                                    flex        : 0.8
                                 },
                                 {
                                     fieldLabel  : 'Aktif',
@@ -242,7 +259,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
                                     emptyText   : 'Masukan NIK Karyawan',
                                     labelWidth  : 85,
                                     margins     : '2px 2px 2px 2px',
-                                    allowBlank  : false,
+                                    allowBlank  : true,
                                     msgTarget   : 'under',
                                     flex        : 1
                                 },
@@ -253,14 +270,14 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
                                     labelWidth      : 85,
                                     margins         : '2px 2px 2px 2px',
                                     flex            : 1,
-                                    allowBlank      : false,
+                                    allowBlank      : true,
                                     msgTarget       : 'under',
                                     store           : Ext.create('SMS.module.Employee.Profile.store.loadJobname'),
                                     queryMode       : 'local',
                                     displayField    : 'jobname',
+                                    valueField      : 'id',  
                                     typeAhead       : true,
-                                    minChars        : 2,
-                                    valueField      : 'id'                                       
+                                    minChars        : 2                                     
                                 }
                             ]
                         },
@@ -277,7 +294,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
                                     labelWidth      : 85,
                                     margins         : '2px 2px 2px 2px',
                                     flex            : 1.3,
-                                    allowBlank      : false,
+                                    allowBlank      : true,
                                     msgTarget       : 'under',
                                     store           : Ext.create('SMS.module.Employee.Profile.store.Gender'),
                                     queryMode       : 'local',
@@ -291,7 +308,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
                                     labelWidth      : 85,
                                     margins         : '2px 2px 2px 2px',
                                     flex            : 0.7,
-                                    allowBlank      : false,
+                                    allowBlank      : true,
                                     msgTarget       : 'under', 
                                     store           : Ext.create('SMS.module.Employee.Profile.store.Religion'),
                                     queryMode       : 'local',
@@ -313,7 +330,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
                                     labelWidth      : 85,
                                     margins         : '2px 2px 2px 2px',
                                     flex            : 1.3,
-                                    allowBlank      : false,
+                                    allowBlank      : true,
                                     msgTarget       : 'under',
                                     store           : Ext.create('SMS.module.MasterData.Kabupaten.store.Kabupaten'),
                                     displayField    : 'name_kab',
@@ -328,10 +345,11 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
                                     emptyText   : 'Select Birth Date',
                                     labelWidth  : 85,
                                     margins     : '2px 2px 2px 2px',
-                                    allowBlank  : false,
+                                    allowBlank  : true,
                                     msgTarget   : 'under',
                                     type        : 'date', 
-                                    dateFormat  : 'Y-m-d',
+                                    format      : 'Y-m-d',
+                                    submitFormat : 'Y-m-d',
                                     flex        : 0.7
                                 }                        
                             ]
@@ -349,7 +367,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
                                     labelWidth      : 85,
                                     margins         : '2px 2px 2px 2px',
                                     flex            : 1.3,
-                                    allowBlank      : false,
+                                    allowBlank      : true,
                                     msgTarget       : 'under',
                                     store           : Ext.create('SMS.module.Employee.Profile.store.Marry'),
                                     queryMode       : 'local',
@@ -363,7 +381,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
                                     labelWidth      : 85,
                                     margins         : '2px 2px 2px 2px',
                                     flex            : 0.7,
-                                    allowBlank      : false,
+                                    allowBlank      : true,
                                     msgTarget       : 'under',
                                     store           : Ext.create('SMS.module.Employee.Profile.store.Status'),
                                     queryMode       : 'local',
@@ -376,22 +394,22 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
                             xtype       : 'filefield',
                             flex        : 1,
                             fieldLabel  : 'Upload Foto',
-                            name        : 'photo',
+                            name        : 'userfile',
+                            id          : 'userfile',
                             emptyText   : 'Upload Photo',
                             labelWidth  : 85,
                             flex        : 1,
                             buttonText  : '',
                             buttonConfig : {
-                                iconCls : 'icon-page_portrait_shot'
+                                iconCls : 'icon-user'
                             },
                             listeners   : {
                             'afterrender': function(field, value, opts){
                                 var me = this;
                                 imagem = me.up('form').queryById('imagePreview');
 
-
                                 //If is multiple file upload
-                                field.fileInputEl.dom.multiple = true;
+                                field.fileInputEl.dom.multiple = false;
                                 
                                 //ação de selecionar arquivos
                                 field.fileInputEl.dom.onchange = function(){
@@ -416,7 +434,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
             name        : 'alamat',
             tooltip     : 'Masukan Alamat Karyawan',
             margin      : '0px 0px 5px 0px',
-            allowBlank  : false,
+            allowBlank  : true,
             msgTarget   : 'under',
             anchor      : '100%',
             xtype       : 'textareafield'
@@ -431,6 +449,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
             handler : function(){
                 var form    = this.up('form').getForm();
                 var nama_lengkap    = form.findField('nama_lengkap').getValue();
+                var phone           = form.findField('phone').getValue();
                 var nik             = form.findField('nik').getValue();
                 var id_jobname      = form.findField('id_jobname').getValue();
                 var gender          = form.findField('gender').getValue(); 
@@ -439,7 +458,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
                 var tgl_lahir       = form.findField('tgl_lahir').getRawValue();  
                 var marital_status  = form.findField('marital_status').getValue();
                 var status_kerja    = form.findField('status_kerja').getValue();
-                var photo           = form.findField('photo').getValue();
+                var userfile        = form.findField('userfile').getValue();
                 var alamat          = form.findField('alamat').getValue();  
                 var active          = form.findField('active').getValue();  
 
@@ -449,7 +468,8 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
                         headers : {'Content-Type':'multipart/form-data; charset=UTF-8'},
                         method  : 'POST',
                         params  : {
-                            nama_lengkap    : nama_lengkap, 
+                            nama_lengkap    : nama_lengkap,
+                            phone           : phone, 
                             nik             : nik,
                             id_jobname      : id_jobname,
                             gender          : gender,
@@ -458,7 +478,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
                             tgl_lahir       : tgl_lahir,
                             marital_status  : marital_status,
                             status_kerja    : status_kerja,
-                            photo           : photo,
+                            userfile        : userfile,
                             alamat          : alamat,
                             active          : active
                         },
@@ -466,7 +486,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
                           success : function(response, op){
                             Ext.MessageBox.show({
                                 title           : 'Informasi',
-                                msg             : Ext.data.JsonReader(op.result.total),
+                                msg             : Ext.data.JsonReader(op.result.msg),
                                 icon            : Ext.MessageBox.INFO,
                                 buttons         : Ext.MessageBox.OK
                             });
@@ -499,6 +519,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
                 var form            = this.up('form').getForm();
                 var id              = form.findField('id').getValue();
                 var nama_lengkap    = form.findField('nama_lengkap').getValue();
+                var phone           = form.findField('phone').getValue();
                 var nik             = form.findField('nik').getValue();
                 var id_jobname      = form.findField('id_jobname').getValue();
                 var gender          = form.findField('gender').getValue(); 
@@ -507,9 +528,10 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
                 var tgl_lahir       = form.findField('tgl_lahir').getRawValue();  
                 var marital_status  = form.findField('marital_status').getValue();
                 var status_kerja    = form.findField('status_kerja').getValue();
-                var photo           = form.findField('photo').getValue();
+                var userfile        = form.findField('userfile').getValue();
                 var alamat          = form.findField('alamat').getValue();    
                 var active          = form.findField('active').getValue();
+
                 Ext.MessageBox.show({
                     title   : 'Konfirmasi',
                     msg     : 'Anda Yakin Merubah Data',
@@ -525,6 +547,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
                                 params  : {
                                     id              : id,
                                     nama_lengkap    : nama_lengkap, 
+                                    phone           : phone, 
                                     nik             : nik,
                                     id_jobname      : id_jobname,
                                     gender          : gender,
@@ -533,7 +556,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
                                     tgl_lahir       : tgl_lahir,
                                     marital_status  : marital_status,
                                     status_kerja    : status_kerja,
-                                    photo           : photo,
+                                    userfile        : userfile,
                                     alamat          : alamat,
                                     active          : active
                                 },
@@ -544,22 +567,12 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
                                         icon        : Ext.MessageBox.INFO,
                                         buttons     : Ext.MessageBox.OK,
                                         fn          : function(btn, gridPanel, selected){
-                                            var form    = Ext.getCmp('formprofile');
+                                            var form    = Ext.getCmp('biography');
                                             var grid    = Ext.getCmp('gridprofile');
                                             var pic     = form.queryById('imagePreview');
                                             pic.setSrc('');
                                             form.getForm().reset();
                                             grid.getSelectionModel().deselectAll();
-                                            if(createAnggota == false){
-                                                var saveButton = form.down('button[text=Save]');
-                                                saveButton.setDisabled(false);
-                                            }else{
-                                                var saveButton = form.down('button[text=Save]');
-                                                saveButton.setDisabled(true);
-                                            }
-
-                                            var updateButton = form.down('button[text=Edit]');
-                                            updateButton.setDisabled(true);
                                             Ext.ComponentQuery.query('#gridprofile')[0].getStore('SMS.module.Employee.Profile.store.Profile').reload();
                                         }        
                                     });
@@ -571,21 +584,12 @@ Ext.define('SMS.module.Employee.Profile.view.form.Biography', {
                                         icon    : Ext.MessageBox.ERROR,
                                         buttons : Ext.MessageBox.OK,
                                         fn      : function(btn, gridPanel, selected){
-                                            var form    = Ext.getCmp('formprofile');
+                                            var form    = Ext.getCmp('biography');
                                             var grid    = Ext.getCmp('gridprofile');
                                             var pic     = form.queryById('imagePreview');
                                             pic.setSrc('');
                                             form.getForm().reset();
                                             grid.getSelectionModel().deselectAll();
-                                            if(createAnggota == false){
-                                                var saveButton = form.down('button[text=Save]');
-                                                saveButton.setDisabled(false);
-                                            }else{
-                                                var saveButton = form.down('button[text=Save]');
-                                                saveButton.setDisabled(true);
-                                            }
-
-                                            var updateButton = form.down('button[text=Edit]');
                                             updateButton.setDisabled(true);
                                             Ext.ComponentQuery.query('#gridprofile')[0].getStore('SMS.module.Employee.Profile.store.Profile').reload();
                                         }  
@@ -666,7 +670,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Pendidikan', {
                     emptyText   : 'Masukan Nama Sekolah',
                     labelWidth  : 85,
                     margins     : '2px 2px 2px 2px',
-                    allowBlank  : false,
+                    allowBlank  : true,
                     msgTarget   : 'under',
                     flex        : 1
                 },
@@ -695,7 +699,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Pendidikan', {
                     labelWidth      : 85,
                     margins         : '2px 2px 2px 2px',
                     flex            : 1.3,
-                    allowBlank      : false,
+                    allowBlank      : true,
                     msgTarget       : 'under',
                     // store           : Ext.create('ERPh.module.MasterData.store.Region'),
                     displayField    : 'name',
@@ -707,7 +711,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Pendidikan', {
                     emptyText   : 'Masukan Nomor Ijazah',
                     labelWidth  : 85,
                     margins     : '2px 2px 2px 2px',
-                    allowBlank  : false,
+                    allowBlank  : true,
                     msgTarget   : 'under',
                     flex        : 1
                 },
@@ -735,7 +739,6 @@ Ext.define('SMS.module.Employee.Profile.view.form.Pendidikan', {
                 var jenjang         = form.findField('jenjang').getValue();
                 var no_ijazah       = form.findField('no_ijazah').getValue(); 
                 var tahun           = form.findField('tahun').getValue();
-                var active          = form.findField('active').getValue();  
 
                 if(form.isValid()){
                    form.submit({
@@ -747,10 +750,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Pendidikan', {
                             jurusan         : jurusan,
                             jenjang         : jenjang,
                             no_ijazah       : no_ijazah,
-                            tahun           : tahun,
-                            no_ijazah       : no_ijazah,
-                            tahun           : tahun,
-                            active          : active
+                            tahun           : tahun
                         },
                         waitMsg: 'Please Wait Data is Processing',
                           success : function(response, op){
@@ -791,7 +791,6 @@ Ext.define('SMS.module.Employee.Profile.view.form.Pendidikan', {
                 var jenjang         = form.findField('jenjang').getValue();
                 var no_ijazah       = form.findField('no_ijazah').getValue(); 
                 var tahun           = form.findField('tahun').getValue();
-                var active          = form.findField('active').getValue();  
                 Ext.MessageBox.show({
                     title   : 'Konfirmasi',
                     msg     : 'Anda Yakin Merubah Data',
@@ -810,10 +809,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Pendidikan', {
                                     jurusan         : jurusan,
                                     jenjang         : jenjang,
                                     no_ijazah       : no_ijazah,
-                                    tahun           : tahun,
-                                    no_ijazah       : no_ijazah,
-                                    tahun           : tahun,
-                                    active          : active
+                                    tahun           : tahun
                                 },
                                 success : function(response, op){
                                     Ext.MessageBox.show({
@@ -975,7 +971,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Keahlian', {
                     name        : 'nama_keahlian',
                     emptyText   : 'Masukan Nama Keahlian',
                     margins     : '2px 2px 2px 2px',
-                    allowBlank  : false,
+                    allowBlank  : true,
                     msgTarget   : 'under',
                     flex        : 1
                 }
@@ -992,7 +988,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Keahlian', {
                     name        : 'keterangan',
                     emptyText   : 'Masukan Keterangan Disini',
                     margins     : '2px 2px 2px 2px',
-                    allowBlank  : false,
+                    allowBlank  : true,
                     msgTarget   : 'under',
                     flex        : 1
                 }
@@ -1009,7 +1005,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Keahlian', {
                     name        : 'describtion',
                     emptyText   : 'Masukan Deskripsi Disini',
                     margins     : '2px 2px 2px 2px',
-                    allowBlank  : false,
+                    allowBlank  : true,
                     msgTarget   : 'under',
                     flex        : 1
                 }
@@ -1242,7 +1238,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Pengalaman', {
                     name        : 'nama_perusahaan',
                     emptyText   : 'Masukan Nama Perusahaan',
                     margins     : '2px 2px 2px 2px',
-                    allowBlank  : false,
+                    allowBlank  : true,
                     msgTarget   : 'under',
                     flex        : 1
                 },
@@ -1252,7 +1248,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Pengalaman', {
                     name        : 'jenis_usaha',
                     emptyText   : 'Masukan Jenis Usaha',
                     margins     : '2px 2px 2px 2px',
-                    allowBlank  : false,
+                    allowBlank  : true,
                     msgTarget   : 'under',
                     flex        : 1
                 }
@@ -1269,7 +1265,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Pengalaman', {
                     name        : 'jabatan',
                     emptyText   : 'Jabatan',
                     margins     : '2px 2px 2px 2px',
-                    allowBlank  : false,
+                    allowBlank  : true,
                     msgTarget   : 'under',
                     flex        : 1
                 },
@@ -1279,7 +1275,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Pengalaman', {
                     name        : 'masa_kerja',
                     emptyText   : 'Masa Kerja',
                     margins     : '2px 2px 2px 2px',
-                    allowBlank  : false,
+                    allowBlank  : true,
                     msgTarget   : 'under',
                     flex        : 1
                 }
@@ -1296,7 +1292,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Pengalaman', {
                     name        : 'alamat',
                     emptyText   : 'Masukan Alamat Disini',
                     margins     : '2px 2px 2px 2px',
-                    allowBlank  : false,
+                    allowBlank  : true,
                     msgTarget   : 'under',
                     flex        : 1
                 }
@@ -1320,7 +1316,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Pengalaman', {
                         headers : {'Content-Type':'multipart/form-data; charset=UTF-8'},
                         method  : 'POST',
                         params  : {
-                            nama_keahlian    : nama_perusahaan, 
+                            nama_perusahaan  : nama_perusahaan, 
                             jenis_usaha      : jenis_usaha,
                             jabatan          : jabatan,
                             masa_kerja       : masa_kerja,
@@ -1379,7 +1375,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Pengalaman', {
                                 method  : 'POST',
                                 params  : {
                                     id               : id,
-                                    nama_keahlian    : nama_perusahaan, 
+                                    nama_perusahaan  : nama_perusahaan, 
                                     jenis_usaha      : jenis_usaha,
                                     jabatan          : jabatan,
                                     masa_kerja       : masa_kerja,
@@ -1542,7 +1538,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Pelatihan', {
                     name        : 'materi_pelatihan',
                     emptyText   : 'Masukan Materi Pelatihan',
                     margins     : '2px 2px 2px 2px',
-                    allowBlank  : false,
+                    allowBlank  : true,
                     msgTarget   : 'under',
                     flex        : 1
                 }
@@ -1559,7 +1555,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Pelatihan', {
                     name        : 'no_sertifikat',
                     emptyText   : 'No Sertifikat',
                     margins     : '2px 2px 2px 2px',
-                    allowBlank  : false,
+                    allowBlank  : true,
                     msgTarget   : 'under',
                     flex        : 1
                 },
@@ -1568,7 +1564,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Pelatihan', {
                     name        : 'penyelenggara',
                     emptyText   : 'Penyelenggara',
                     margins     : '2px 2px 2px 2px',
-                    allowBlank  : false,
+                    allowBlank  : true,
                     msgTarget   : 'under',
                     flex        : 1
                 }
@@ -1585,7 +1581,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Pelatihan', {
                     name        : 'tempat',
                     emptyText   : 'Tempat Pelatihan',
                     margins     : '2px 2px 2px 2px',
-                    allowBlank  : false,
+                    allowBlank  : true,
                     msgTarget   : 'under',
                     flex        : 1
                 },
@@ -1596,7 +1592,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Pelatihan', {
                     dateFormat  : 'Y:m:d',
                     submitFormat : 'Y:m:d',
                     margins     : '2px 2px 2px 2px',
-                    allowBlank  : false,
+                    allowBlank  : true,
                     msgTarget   : 'under',
                     flex        : 1
                 }
@@ -1620,11 +1616,11 @@ Ext.define('SMS.module.Employee.Profile.view.form.Pelatihan', {
                         headers : {'Content-Type':'multipart/form-data; charset=UTF-8'},
                         method  : 'POST',
                         params  : {
-                            nama_keahlian    : nama_perusahaan, 
-                            jenis_usaha      : jenis_usaha,
-                            jabatan          : jabatan,
-                            masa_kerja       : masa_kerja,
-                            alamat           : alamat
+                            materi_pelatihan : nama_perusahaan, 
+                            no_sertifikat    : jenis_usaha,
+                            penyelenggara    : penyelenggara,
+                            tempat           : tempat,
+                            waktu            : waktu
                         },
                         waitMsg: 'Please Wait Data is Processing',
                           success : function(response, op){
@@ -1679,11 +1675,11 @@ Ext.define('SMS.module.Employee.Profile.view.form.Pelatihan', {
                                 method  : 'POST',
                                 params  : {
                                     id               : id,
-                                    nama_keahlian    : nama_perusahaan, 
-                                    jenis_usaha      : jenis_usaha,
-                                    jabatan          : jabatan,
-                                    masa_kerja       : masa_kerja,
-                                    alamat           : alamat
+                                    materi_pelatihan : nama_perusahaan, 
+                                    no_sertifikat    : jenis_usaha,
+                                    penyelenggara    : penyelenggara,
+                                    tempat           : tempat,
+                                    waktu            : waktu
                                 },
                                 success : function(response, op){
                                     Ext.MessageBox.show({
@@ -1842,7 +1838,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Catatan', {
                     dateFormat  : 'Y:m:d',
                     submitFormat : 'Y:m:d',
                     margins     : '2px 2px 2px 2px',
-                    allowBlank  : false,
+                    allowBlank  : true,
                     msgTarget   : 'under',
                     flex        : 1
                 }
@@ -1859,7 +1855,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Catatan', {
                     name        : 'keterangan',
                     emptyText   : 'Masukan Keterangan Disini',
                     margins     : '2px 2px 2px 2px',
-                    allowBlank  : false,
+                    allowBlank  : true,
                     msgTarget   : 'under',
                     flex        : 1
                 }
@@ -1876,7 +1872,7 @@ Ext.define('SMS.module.Employee.Profile.view.form.Catatan', {
                     name        : 'describtion',
                     emptyText   : 'Masukan Deskripsi Disini',
                     margins     : '2px 2px 2px 2px',
-                    allowBlank  : false,
+                    allowBlank  : true,
                     msgTarget   : 'under',
                     flex        : 1
                 }
@@ -1898,11 +1894,9 @@ Ext.define('SMS.module.Employee.Profile.view.form.Catatan', {
                         headers : {'Content-Type':'multipart/form-data; charset=UTF-8'},
                         method  : 'POST',
                         params  : {
-                            nama_keahlian    : nama_perusahaan, 
-                            jenis_usaha      : jenis_usaha,
-                            jabatan          : jabatan,
-                            masa_kerja       : masa_kerja,
-                            alamat           : alamat
+                                tanggal          : tanggal, 
+                                keterangan       : keterangan,
+                                describtion      : describtion
                         },
                         waitMsg: 'Please Wait Data is Processing',
                           success : function(response, op){
@@ -1955,11 +1949,9 @@ Ext.define('SMS.module.Employee.Profile.view.form.Catatan', {
                                 method  : 'POST',
                                 params  : {
                                     id               : id,
-                                    nama_keahlian    : nama_perusahaan, 
-                                    jenis_usaha      : jenis_usaha,
-                                    jabatan          : jabatan,
-                                    masa_kerja       : masa_kerja,
-                                    alamat           : alamat
+                                    tanggal          : tanggal, 
+                                    keterangan       : keterangan,
+                                    describtion      : describtion
                                 },
                                 success : function(response, op){
                                     Ext.MessageBox.show({

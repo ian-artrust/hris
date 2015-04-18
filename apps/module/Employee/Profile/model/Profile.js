@@ -28,7 +28,11 @@ Ext.define('SMS.module.Employee.Profile.model.Profile', {
         {
             name    : 'tgl_lahir',
             type    : 'date',
-            dateFormat : 'c'
+            dateFormat: 'Y-m-d'
+        },
+        {
+            name    : 'gender',
+            type    : 'string'
         },
         {
             name    : 'alamat',
@@ -55,7 +59,7 @@ Ext.define('SMS.module.Employee.Profile.model.Profile', {
             type    : 'string'
         },
         {
-            name    : 'photo',
+            name    : 'userfile',
             type    : 'string'
         }
     ]

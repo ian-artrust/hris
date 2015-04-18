@@ -30,18 +30,20 @@ class C_profile extends IAN_Controller{
 		foreach ($result->result() as $key => $value) {
 			$data['data'][]=array(
 				'id' 				=> $value->id,
+				'nama_lengkap'		=> $value->nama_lengkap,
 				'nik'				=> $value->nik,
 				'id_jobname' 		=> $value->id_jobname,
 				'jobname'			=> $value->jobname,
 				'tempat' 			=> $value->tempat,
 				'tgl_lahir' 		=> $value->tgl_lahir,
+				'gender' 			=> $value->gender,
 				'alamat' 			=> $value->alamat,
 				'phone' 			=> $value->phone,
 				'marital_status' 	=> $value->marital_status,
 				'agama' 			=> $value->agama,
 				'status_kerja' 		=> $value->status_kerja,
 				'active' 			=> $value->active,
-				'photo' 			=> $value->photo
+				'userfile' 			=> base_url().'images/'.$value->userfile
 			);
 		}
 
@@ -53,19 +55,15 @@ class C_profile extends IAN_Controller{
 	public function delProfile(){
 		$data = json_decode($this->input->post('post'));
 		foreach ($data as $row) {
-			$cekResult = $this->m_profile->cekRelasi($row->id);
-
-			if($cekResult == 0){
-				$this->m_profile->deleteProfile($row->id);
-				$data['msg']=0;
-			} else {
-				$data['msg']=1;
-			}
+			$picfile = $this->m_profile->getID($row->id)->userfile;
+			$path = FCPATH.'images'.DIRECTORY_SEPARATOR.$picfile;
+			$this->m_profile->deleteProfile($row->id);
+			unlink($path);
 		}
 		echo json_encode($data);
 	}
 
-	public function saveProfile(){
+	public function saveBio(){
 		$config = array(
 	      'allowed_types' => 'jpg|png|gif',
 	      'upload_path'   => $this->image_path,
@@ -76,9 +74,11 @@ class C_profile extends IAN_Controller{
     
 	    $this->load->library('upload', $config);
 	    $this->upload->initialize($config);
+	    $up = $this->upload->do_upload();
 	    $userfile      = $this->input->post('photo');
-	    if (!($this->upload->do_upload())) {
+	    if (!$up) {
 	      $error    = array('error' => $this->upload->display_errors());
+	      $msg 		= "Ukuran Gambar Maskimal 200Kb";
 	    } else {
 	        $upload_data    = $this->upload->data();
 	        $userfile       = $upload_data['file_name'];
@@ -91,6 +91,7 @@ class C_profile extends IAN_Controller{
 		$uuid         = $this->m_profile->getUUID();
 		$nama_lengkap    = ($this->input->post('nama_lengkap', TRUE) ? $this->input->post('nama_lengkap', TRUE) : '');
 		$nik		     = ($this->input->post('nik', TRUE) ? $this->input->post('nik', TRUE) : '');
+		$phone		     = ($this->input->post('phone', TRUE) ? $this->input->post('phone', TRUE) : '');
 		$id_jobname      = ($this->input->post('id_jobname', TRUE) ? $this->input->post('id_jobname', TRUE) : '');
 		$gender   		 = ($this->input->post('gender', TRUE) ? $this->input->post('gender', TRUE) : '');
 		$agama   		 = ($this->input->post('agama', TRUE) ? $this->input->post('agama', TRUE) : '');
@@ -98,7 +99,6 @@ class C_profile extends IAN_Controller{
 		$tgl_lahir 	     = ($this->input->post('tgl_lahir', TRUE) ? $this->input->post('tgl_lahir', TRUE) : '');
 		$marital_status  = ($this->input->post('marital_status', TRUE) ? $this->input->post('marital_status', TRUE) : '');
 		$status_kerja    = ($this->input->post('status_kerja', TRUE) ? $this->input->post('status_kerja', TRUE) : '');
-		$photo    		 = ($this->input->post('photo', TRUE) ? $this->input->post('photo', TRUE) : '');
 		$alamat   		 = ($this->input->post('alamat', TRUE) ? $this->input->post('alamat', TRUE) : '');
 		$active 		 = ($this->input->post('active', TRUE) ? $this->input->post('active', TRUE) : '');
     	if($active == TRUE) { 
@@ -108,16 +108,20 @@ class C_profile extends IAN_Controller{
     	}
 
     	if(empty($nik)){
-    		$success = 3;
+    		$success 	= 3;
+    		$msg 		= "Data Tidak Boleh Kosong";
     	} elseif($this->m_profile->cekData($nik) == 0){
-    		$this->m_profile->saveProfile($uuid, $nama_lengkap, $nik, $id_jobname, $gender, $agama, $tempat, $tgl_lahir, $marital_status, $status_kerja, $photo, $alamat, $active);
-    		$success = 1;
+    		$this->m_profile->saveProfile($uuid, $nama_lengkap, $nik, $phone, $id_jobname, $gender, $agama, $tempat, $tgl_lahir, $marital_status, $status_kerja, $userfile, $alamat, $active);
+    		$success 	= 1;
+    		$msg 		= "Data Berhasil Disimpan";
     	} else {
-    		$success = 2;
+    		$success 	= 2;
+    		$msg 		= "Error Please Contact Your Vendor";
     	}
 
     	$data['total'] 		= $success;
     	$data['success'] 	= TRUE;
+    	$data['msg']		= $msg;
     	echo json_encode($data);    	
 	}
 
@@ -135,7 +139,7 @@ class C_profile extends IAN_Controller{
 		  $userfile     ='noimage.jpg';
 		  if (!($this->upload->do_upload())) {
 		    $error = array('error' => $this->upload->display_errors());
-		    $success = "Periksa Kembali Ukuran Gambar";
+		    $msg = "Periksa Kembali Ukuran Gambar";
 		  } else {
 		      $upload_data = $this->upload->data();
 		      $userfile     = $upload_data['file_name'];
@@ -155,7 +159,6 @@ class C_profile extends IAN_Controller{
 		$tgl_lahir 	     = ($this->input->post('tgl_lahir', TRUE) ? $this->input->post('tgl_lahir', TRUE) : '');
 		$marital_status  = ($this->input->post('marital_status', TRUE) ? $this->input->post('marital_status', TRUE) : '');
 		$status_kerja    = ($this->input->post('status_kerja', TRUE) ? $this->input->post('status_kerja', TRUE) : '');
-		$photo    		 = ($this->input->post('photo', TRUE) ? $this->input->post('photo', TRUE) : '');
 		$alamat   		 = ($this->input->post('alamat', TRUE) ? $this->input->post('alamat', TRUE) : '');
 		$active 	= ($this->input->post('active', TRUE) ? $this->input->post('active', TRUE) : '');
 		if($active == TRUE) { 
@@ -165,17 +168,17 @@ class C_profile extends IAN_Controller{
     	}
 
     	if($userfile=="noimage.jpg"){
-	      $this->m_anggota->updateAnggotaWP($id, $nama_lengkap, $nik, $id_jobname, $gender, $agama, $tempat, $tgl_lahir, $marital_status, $status_kerja, $alamat, $active);
+	      $this->m_profile->updateProfileWP($id, $nama_lengkap, $nik, $id_jobname, $gender, $agama, $tempat, $tgl_lahir, $marital_status, $status_kerja, $alamat, $active);
 	      $success = "Data Berhasil Dirubah"; 
 	    } else {
-	      if($first_name == '' && $first_name == NULL){ 
+	      if(empty($nik)){ 
 	        $success = "Pengisian Data Salah"; 
-	      } else if($this->m_anggota->cekUserID($first_name, $id) == 0){ 
+	      } else if($this->m_profile->cekUserID($nik, $id) == 0){ 
 	        $data       = ($this->input->post('id', TRUE) ? $this->input->post('id', TRUE) : '');
-	        $picfile    = $this->m_anggota->getID($data)->photo;
+	        $picfile    = $this->m_profile->getID($data)->userfile;
 	        $path       = FCPATH.'images'.DIRECTORY_SEPARATOR.$picfile;
 	        unlink($path);
-	        $this->m_anggota->updateAnggota($id, $nama_lengkap, $nik, $id_jobname, $gender, $agama, $tempat, $tgl_lahir, $marital_status, $status_kerja, $photo, $alamat, $active);
+	        $this->m_profile->updateProfile($id, $nama_lengkap, $nik, $id_jobname, $gender, $agama, $tempat, $tgl_lahir, $marital_status, $status_kerja, $alamat, $userfile, $active);
 	        $success = "Data Berhasil Dirubah"; 
 	      } else { 
 	        $success = "Pengisian Data Salah";  
@@ -192,11 +195,13 @@ class C_profile extends IAN_Controller{
     	foreach ($result->result() as $key => $value) {
 			$data['data'][]=array(
 				'id' 				=> $value->id,
+				'nama_lengkap'		=> $value->nama_lengkap,
 				'nik'				=> $value->nik,
 				'id_jobname' 		=> $value->id_jobname,
 				'jobname'			=> $value->jobname,
 				'tempat' 			=> $value->tempat,
-				'tgl_lahir' 			=> $value->tglahir,
+				'tgl_lahir' 		=> $value->tgl_lahir,
+				'gender' 			=> $value->gender,
 				'alamat' 			=> $value->alamat,
 				'phone' 			=> $value->phone,
 				'marital_status' 	=> $value->marital_status,
@@ -209,4 +214,206 @@ class C_profile extends IAN_Controller{
 		$data['success']	= true;
 		echo json_encode($data);
 	}
+
+	public function savePendidikan(){
+		$uuid         	 = $this->m_profile->getUUID();
+		$school_name     = ($this->input->post('school_name', TRUE) ? $this->input->post('school_name', TRUE) : '');
+		$jurusan	     = ($this->input->post('jurusan', TRUE) ? $this->input->post('jurusan', TRUE) : '');
+		$jenjang         = ($this->input->post('jenjang', TRUE) ? $this->input->post('jenjang', TRUE) : '');
+		$no_ijazah       = ($this->input->post('no_ijazah', TRUE) ? $this->input->post('no_ijazah', TRUE) : '');
+		$tahun   		 = ($this->input->post('tahun', TRUE) ? $this->input->post('tahun', TRUE) : '');
+
+		if(empty($school_name)){
+    		$success = 3;
+    	} elseif($this->m_profile->cekData($school_name) == 0){
+    		$this->m_profile->savePendidikan($uuid, $school_name, $jurusan, $jenjang, $no_ijazah, $tahun);
+    		$success = 1;
+    	} else {
+    		$success = 2;
+    	}
+
+    	$data['total'] 		= $success;
+    	$data['success'] 	= TRUE;
+    	echo json_encode($data);    	
+	}
+
+	public function editPendidikan(){
+		$id 			= ($this->input->post('id', TRUE) ? $this->input->post('id', TRUE) : '');
+		$school_name     = ($this->input->post('school_name', TRUE) ? $this->input->post('school_name', TRUE) : '');
+		$jurusan	     = ($this->input->post('jurusan', TRUE) ? $this->input->post('jurusan', TRUE) : '');
+		$jenjang         = ($this->input->post('jenjang', TRUE) ? $this->input->post('jenjang', TRUE) : '');
+		$no_ijazah       = ($this->input->post('no_ijazah', TRUE) ? $this->input->post('no_ijazah', TRUE) : '');
+		$tahun   		 = ($this->input->post('tahun', TRUE) ? $this->input->post('tahun', TRUE) : '');
+    	if(empty($school_name)){
+    		$success = 2;
+    	} else {
+    		$this->m_profile->updatePendidikan($id, $school_name, $jurusan, $jenjang, $no_ijazah, $tahun);
+    		$success = 1;
+    	}
+
+    	$data['total'] 		= $success;
+    	$data['success'] 	= TRUE;
+    	echo json_encode($data);   
+
+	}
+
+	public function saveKeahlian(){
+		$uuid         	 = $this->m_profile->getUUID();
+		$nama_keahlian   = ($this->input->post('nama_keahlian', TRUE) ? $this->input->post('nama_keahlian', TRUE) : '');
+		$keterangan	     = ($this->input->post('jurusan', TRUE) ? $this->input->post('keterangan', TRUE) : '');
+		$describtion     = ($this->input->post('describtion', TRUE) ? $this->input->post('describtion', TRUE) : '');
+
+		if(empty($jobname)){
+    		$success = 3;
+    	} elseif($this->m_profile->cekData($nama_keahlian) == 0){
+    		$this->m_jobname->saveKeahlian($uuid, $nama_keahlian, $keterangan, $describtion);
+    		$success = 1;
+    	} else {
+    		$success = 2;
+    	}
+
+    	$data['total'] 		= $success;
+    	$data['success'] 	= TRUE;
+    	echo json_encode($data);    	
+	}
+
+	public function editKeahlian(){
+		$id 			= ($this->input->post('id', TRUE) ? $this->input->post('id', TRUE) : '');
+		$nama_keahlian   = ($this->input->post('nama_keahlian', TRUE) ? $this->input->post('nama_keahlian', TRUE) : '');
+		$keterangan	     = ($this->input->post('jurusan', TRUE) ? $this->input->post('keterangan', TRUE) : '');
+		$describtion     = ($this->input->post('describtion', TRUE) ? $this->input->post('describtion', TRUE) : '');
+
+    	if(empty($nama_keahlian)){
+    		$success = 2;
+    	} else {
+    		$this->m_profile->updateKeahlan($id, $nama_keahlian, $keterangan, $describtion);
+    		$success = 1;
+    	}
+
+    	$data['total'] 		= $success;
+    	$data['success'] 	= TRUE;
+    	echo json_encode($data);   
+
+	}
+	public function savePengalaman(){
+		$uuid         	 = $this->m_profile->getUUID();
+		$nama_perusahaan = ($this->input->post('nama_perusahaan', TRUE) ? $this->input->post('nama_perusahaan', TRUE) : '');
+		$jenis_usaha	 = ($this->input->post('jenis_usaha', TRUE) ? $this->input->post('jenis_usaha', TRUE) : '');
+		$masa_kerja      = ($this->input->post('masa_kerja', TRUE) ? $this->input->post('masa_kerja', TRUE) : '');
+		$alamat          = ($this->input->post('alamat', TRUE) ? $this->input->post('alamat', TRUE) : '');
+
+		if(empty($nama_perusahaan)){
+    		$success = 3;
+    	} elseif($this->m_profile->cekData($Pengalaman) == 0){
+    		$this->m_profile->savePengalaman($uuid, $nama_perusahaan, $jenis_usaha, $masa_kerja, $alamat);
+    		$success = 1;
+    	} else {
+    		$success = 2;
+    	}
+
+    	$data['total'] 		= $success;
+    	$data['success'] 	= TRUE;
+    	echo json_encode($data);    	
+	}
+
+	public function editPengalaman(){
+		$id 			= ($this->input->post('id', TRUE) ? $this->input->post('id', TRUE) : '');
+		$nama_perusahaan = ($this->input->post('nama_perusahaan', TRUE) ? $this->input->post('nama_perusahaan', TRUE) : '');
+		$jenis_usaha	 = ($this->input->post('jenis_usaha', TRUE) ? $this->input->post('jenis_usaha', TRUE) : '');
+		$masa_kerja      = ($this->input->post('masa_kerja', TRUE) ? $this->input->post('masa_kerja', TRUE) : '');
+		$alamat          = ($this->input->post('alamat', TRUE) ? $this->input->post('alamat', TRUE) : '');
+
+    	if(empty($nama_perusahaan)){
+    		$success = 2;
+    	} else {
+    		$this->m_profile->updatePengalaman($id, $nama_perusahaan, $jenis_usaha, $masa_kerja, $alamat);
+    		$success = 1;
+    	}
+
+    	$data['total'] 		= $success;
+    	$data['success'] 	= TRUE;
+    	echo json_encode($data);   
+
+	}
+		public function savePelatihan(){
+		$uuid         	 	= $this->m_profile->getUUID();
+		$materi_pelatihan   = ($this->input->post('materi_pelatihan', TRUE) ? $this->input->post('materi_pelatihan', TRUE) : '');
+		$no_sertifikat		= ($this->input->post('no_sertifikat', TRUE) ? $this->input->post('no_sertifikat', TRUE) : '');
+		$penyelenggara      = ($this->input->post('penyelenggara', TRUE) ? $this->input->post('penyelenggara', TRUE) : '');
+		$tempat 			= ($this->input->post('tempat', TRUE) ? $this->input->post('tempat', TRUE) : '');
+		$waktu				= ($this->input->post('waktu', TRUE) ? $this->input->post('waktu', TRUE) : '');
+
+		if(empty($materi_pelatihan)){
+    		$success = 3;
+    	} elseif($this->m_profile->cekData($Pelatihan) == 0){
+    		$this->m_profile->savePelatihan($uuid, $materi_pelatihan, $no_sertifikat, $penyelenggara, $waktu);
+    		$success = 1;
+    	} else {
+    		$success = 2;
+    	}
+
+    	$data['total'] 		= $success;
+    	$data['success'] 	= TRUE;
+    	echo json_encode($data);    	
+	}
+
+	public function editPelatihan(){
+		$id 			= ($this->input->post('id', TRUE) ? $this->input->post('id', TRUE) : '');
+		$materi_pelatihan   = ($this->input->post('materi_pelatihan', TRUE) ? $this->input->post('materi_pelatihan', TRUE) : '');
+		$no_sertifikat		= ($this->input->post('no_sertifikat', TRUE) ? $this->input->post('no_sertifikat', TRUE) : '');
+		$penyelenggara      = ($this->input->post('penyelenggara', TRUE) ? $this->input->post('penyelenggara', TRUE) : '');
+		$tempat 			= ($this->input->post('tempat', TRUE) ? $this->input->post('tempat', TRUE) : '');
+		$waktu				= ($this->input->post('waktu', TRUE) ? $this->input->post('waktu', TRUE) : '');
+
+    	if(empty($materi_pelatihan)){
+    		$success = 2;
+    	} else {
+    		$this->m_jobname->updateJobname($id, $materi_pelatihan, $no_sertifikat, $penyelenggara, $waktu);
+    		$success = 1;
+    	}
+
+    	$data['total'] 		= $success;
+    	$data['success'] 	= TRUE;
+    	echo json_encode($data);   
+
+	}
+	public function saveCatatan(){
+		$uuid         	 	= $this->m_profile->getUUID();
+		$tanggal   			= ($this->input->post('tanggal', TRUE) ? $this->input->post('tanggal', TRUE) : '');
+		$keterangan			= ($this->input->post('keterangan', TRUE) ? $this->input->post('keterangan', TRUE) : '');
+		$describtion    	= ($this->input->post('describtion', TRUE) ? $this->input->post('describtion', TRUE) : '');
+
+		if(empty($tanggal)){
+    		$success = 3;
+    	} elseif($this->m_profile->cekData($Catatan) == 0){
+    		$this->m_profile->saveCatatan($uuid, $tanggal, $keterangan, $describtion);
+    		$success = 1;
+    	} else {
+    		$success = 2;
+    	}
+
+    	$data['total'] 		= $success;
+    	$data['success'] 	= TRUE;
+    	echo json_encode($data);    	
+	}
+
+	public function editCatatan(){
+		$id 			= ($this->input->post('id', TRUE) ? $this->input->post('id', TRUE) : '');
+		$tanggal   		= ($this->input->post('tanggal', TRUE) ? $this->input->post('tanggal', TRUE) : '');
+		$keterangan		= ($this->input->post('keterangan', TRUE) ? $this->input->post('keterangan', TRUE) : '');
+		$describtion    = ($this->input->post('describtion', TRUE) ? $this->input->post('describtion', TRUE) : '');
+
+    	if(empty($tanggal)){
+    		$success = 2;
+    	} else {
+    		$this->m_profile->updateCatatan($id, $tanggal, $keterangan, $describtion);
+    		$success = 1;
+    	}
+
+    	$data['total'] 		= $success;
+    	$data['success'] 	= TRUE;
+    	echo json_encode($data);   
+
+	}
+
 }

@@ -4,12 +4,12 @@ Ext.define('SMS.module.Employee.Profile.controller.Profile', {
 
     init: function() {
         var me = this;
-        // me.getStore('SMS.module.Employee.Profile.store.Profile').load();
+        me.getStore('SMS.module.Employee.Profile.store.Profile').load();
         me.control({
             "gridprofile button[action=delete]"          : {
                 click: me.del
             }, 
-            "#griddepartment"                                 : {
+            "#gridprofile"                                 : {
                itemclick: me.viewProfile
             },            
             "formprofile button[action=save]"        : {
@@ -18,7 +18,7 @@ Ext.define('SMS.module.Employee.Profile.controller.Profile', {
             "biography button[action=reset]"       : {
                 click: me.reset
             },
-            "griddepartmentorg"                          : {
+            "gridprofile"                          : {
                itemdblclick: me.addorg
             },
             "gridprofiletextfield[action=search]"    : {
@@ -35,25 +35,16 @@ Ext.define('SMS.module.Employee.Profile.controller.Profile', {
     },
     reloadStore: function(){
         var me = this;
-        // me.getStore('SMS.module.Employee.Profile.store.Profile').reload();
+        me.getStore('SMS.module.Employee.Profile.store.Profile').reload();
     },
     viewProfile: function(grid, record, item, index, e, eOpts){
         var id = record.data.id;
-        var form = Ext.getCmp('formdepartment');
-        var grid = Ext.getCmp('griddepartmentorg');
+        var form = Ext.getCmp('biography');
+        var grid = Ext.getCmp('gridprofile');
         form.getForm().setValues(record.data);
-
-        var saveButton = form.down('button[action=save]');
-        saveButton.setDisabled(true);
-        console.log(updateProfile);
-
-        if(updateProfile == false) {
-            var updateButton = form.down('button[action=update]');
-            updateButton.setDisabled(false);
-        } else { 
-            var updateButton = form.down('button[action=update]');
-            updateButton.setDisabled(true);
-        }
+        var pic     = form.queryById('imagePreview');
+        pic.setSrc(record.data.userfile);
+        form.getForm().setValues(record.data);
     },
 
     del: function(gridPanel, selected){
@@ -75,7 +66,7 @@ Ext.define('SMS.module.Employee.Profile.controller.Profile', {
             fn              : function(btn, evtObj){
                 if (btn == 'yes') {
                     Ext.Ajax.request({
-                        url             : BASE_URL + 'department/c_dept/delProfile',
+                        url             : BASE_URL + 'profile/c_profile/delProfile',
                         method          : 'POST',
                         params          : {post : Ext.encode(me.CheckedDataEdit)},
                         success         : function(response){
@@ -89,20 +80,18 @@ Ext.define('SMS.module.Employee.Profile.controller.Profile', {
                                     buttons         : Ext.MessageBox.OK
                                 });
                                 /* Yang Dicopy*/
-                                var form    = Ext.getCmp('formdepartment');
-                                var grid    = Ext.getCmp('griddepartment');
+                                var form    = Ext.getCmp('biography');
+                                var grid    = Ext.getCmp('gridprofile');
                                 form.getForm().reset();
                                 grid.getSelectionModel().deselectAll();
-                                grid.getSelectionModel().deselectAll();
-                                Ext.ComponentQuery.query('#griddepartment')[0].getStore('SMS.module.Employee.Profile.store.Profile').reload();
+                                Ext.ComponentQuery.query('#gridprofile')[0].getStore('SMS.module.Employee.Profile.store.Profile').reload();
                                 /* Sampai Sini */
                             } else {
-                                var form    = Ext.getCmp('formdepartment');
-                                var grid    = Ext.getCmp('griddepartment');
+                                var form    = Ext.getCmp('formprofile');
+                                var grid    = Ext.getCmp('gridprofile');
                                 form.getForm().reset();
                                 grid.getSelectionModel().deselectAll();
-                                grid.getSelectionModel().deselectAll();
-                                Ext.ComponentQuery.query('#griddepartment')[0].getStore('SMS.module.Employee.Profile.store.Profile').reload();
+                                Ext.ComponentQuery.query('#gridprofile')[0].getStore('SMS.module.Employee.Profile.store.Profile').reload();
                             }
                         }
                     });
@@ -142,7 +131,7 @@ Ext.define('SMS.module.Employee.Profile.controller.Profile', {
         // console.log(role);
 
         Ext.Ajax.request({
-            url     : BASE_URL + 'department/c_dept/saveProfile',
+            url     : BASE_URL + 'profile/c_dept/saveProfile',
             method  : 'POST',
             params  : {
                 kode_dept       : kode_dept,
@@ -158,11 +147,11 @@ Ext.define('SMS.module.Employee.Profile.controller.Profile', {
                         icon            : Ext.MessageBox.INFO,
                         buttons         : Ext.MessageBox.OK
                     });
-                    var form    = Ext.getCmp('formdepartment');
-                    var grid    = Ext.getCmp('griddepartment');
+                    var form    = Ext.getCmp('formprofile');
+                    var grid    = Ext.getCmp('gridprofile');
                     form.getForm().reset();
                     grid.getSelectionModel().deselectAll();
-                    Ext.ComponentQuery.query('#griddepartment')[0].getStore('SMS.module.Employee.Profile.store.Profile').reload();
+                    Ext.ComponentQuery.query('#gridprofile')[0].getStore('SMS.module.Employee.Profile.store.Profile').reload();
                 }else if (data.total === 2){
                     Ext.MessageBox.show({
                         title           : 'Error',
@@ -170,12 +159,12 @@ Ext.define('SMS.module.Employee.Profile.controller.Profile', {
                         icon            : Ext.MessageBox.ERROR,
                         buttons         : Ext.MessageBox.OK
                     });
-                    var form    = Ext.getCmp('formdepartment');
-                    var grid    = Ext.getCmp('griddepartment');
+                    var form    = Ext.getCmp('formprofile');
+                    var grid    = Ext.getCmp('gridprofile');
                     form.getForm().reset();
                     grid.getSelectionModel().deselectAll();
                     grid.getSelectionModel().deselectAll();
-                    Ext.ComponentQuery.query('#griddepartment')[0].getStore('SMS.module.Employee.Profile.store.Profile').reload();
+                    Ext.ComponentQuery.query('#gridprofile')[0].getStore('SMS.module.Employee.Profile.store.Profile').reload();
                 } else {
                     Ext.MessageBox.show({
                         title           : 'Error',
@@ -204,7 +193,7 @@ Ext.define('SMS.module.Employee.Profile.controller.Profile', {
             fn              : function(btn, evtObj){
                 if (btn == 'yes') {
                     Ext.Ajax.request({
-                        url     : BASE_URL + 'department/c_dept/editProfile',
+                        url     : BASE_URL + 'profile/c_dept/editProfile',
                         method  : 'POST',
                         params  : {
                             id          : id,
@@ -222,11 +211,11 @@ Ext.define('SMS.module.Employee.Profile.controller.Profile', {
                                     icon            : Ext.MessageBox.INFO,
                                     buttons         : Ext.MessageBox.OK
                                 });
-                                var form    = Ext.getCmp('formdepartment');
-                                var grid    = Ext.getCmp('griddepartment');
+                                var form    = Ext.getCmp('formprofile');
+                                var grid    = Ext.getCmp('gridprofile');
                                 form.getForm().reset();
                                 grid.getSelectionModel().deselectAll();
-                                Ext.ComponentQuery.query('#griddepartment')[0].getStore('SMS.module.Employee.Profile.store.Profile').reload();
+                                Ext.ComponentQuery.query('#gridprofile')[0].getStore('SMS.module.Employee.Profile.store.Profile').reload();
                             }else if (data.total === 2){
                                 Ext.MessageBox.show({
                                     title           : 'Error',
@@ -234,11 +223,11 @@ Ext.define('SMS.module.Employee.Profile.controller.Profile', {
                                     icon            : Ext.MessageBox.ERROR,
                                     buttons         : Ext.MessageBox.OK
                                 });
-                                var form    = Ext.getCmp('formdepartment');
-                                var grid    = Ext.getCmp('griddepartment');
+                                var form    = Ext.getCmp('formprofile');
+                                var grid    = Ext.getCmp('gridprofile');
                                 form.getForm().reset();
                                 grid.getSelectionModel().deselectAll();
-                                Ext.ComponentQuery.query('#griddepartment')[0].getStore('SMS.module.Employee.Profile.store.Profile').reload();
+                                Ext.ComponentQuery.query('#gridprofile')[0].getStore('SMS.module.Employee.Profile.store.Profile').reload();
                             } else {
                                 Ext.MessageBox.show({
                                     title           : 'Error',
@@ -256,7 +245,7 @@ Ext.define('SMS.module.Employee.Profile.controller.Profile', {
     search: function(field, evt, opts){
         var value       = field.getValue();
             Ext.Ajax.request({
-                url     : BASE_URL + 'department/c_dept/searchProfile',
+                url     : BASE_URL + 'profile/c_dept/searchProfile',
                 method  : 'POST',
                 params  : {name : value},
                 success : function(response){
@@ -271,6 +260,6 @@ Ext.define('SMS.module.Employee.Profile.controller.Profile', {
     },
 
     print : function(){
-        window.location = BASE_URL + 'department/c_dept/printProfile/';
+        window.location = BASE_URL + 'profile/c_dept/printProfile/';
     },
 })
