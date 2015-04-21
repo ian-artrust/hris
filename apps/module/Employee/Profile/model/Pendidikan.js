@@ -14,7 +14,7 @@ Ext.define('SMS.module.Employee.Profile.model.Pendidikan', {
             type    : 'string'
         },
         {
-            name    : 'level',
+            name    : 'jenjang',
             type    : 'string'
         },
         {

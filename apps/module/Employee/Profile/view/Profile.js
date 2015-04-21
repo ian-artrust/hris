@@ -5,7 +5,8 @@ Ext.define('SMS.module.Employee.Profile.view.Profile', {
     alias    : 'widget.Profile',
     id       : 'Profile',
     layout   : 'fit',
-    frame    : true,     
+    frame    : false, 
+    border   : false,    
     requires : [
         'SMS.module.Employee.Profile.view.grid.GridProfile',
         'SMS.module.Employee.Profile.view.form.FormProfile'

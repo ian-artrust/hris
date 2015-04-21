@@ -88,7 +88,7 @@ class C_profile extends IAN_Controller{
 	        );
 	    }
 
-		$uuid         = $this->m_profile->getUUID();
+		$uuid         	 = $this->m_profile->getUUID();
 		$nama_lengkap    = ($this->input->post('nama_lengkap', TRUE) ? $this->input->post('nama_lengkap', TRUE) : '');
 		$nik		     = ($this->input->post('nik', TRUE) ? $this->input->post('nik', TRUE) : '');
 		$phone		     = ($this->input->post('phone', TRUE) ? $this->input->post('phone', TRUE) : '');
@@ -215,8 +215,44 @@ class C_profile extends IAN_Controller{
 		echo json_encode($data);
 	}
 
+	/*===================== PENDIDIKAN SERVER CONTROLLER ================*/
+
+	public function getPendidikan(){
+		
+		$id_bio = json_decode($this->input->post('post'));
+	    $result = $this->m_profile->getPendidikan($id_bio);
+
+	    if($this->m_profile->cekPendidikan($id_bio) == 0){
+	      $data['data'][] = array(        
+			'id' 				=> '',
+			'id_bio'			=> $id_bio,
+			'school_name'		=> '',
+			'jurusan'	 		=> '',
+			'jenjang'			=> '',
+			'no_ijazah'			=> '',
+			'tahun'		 		=> ''        
+	        );
+	    } else {
+			foreach ($result->result() as $key => $value) {
+				$data['data'][]=array(
+					'id' 				=> $value->id,
+					'id_bio'			=> $value->id_bio,
+					'school_name'		=> $value->school_name,
+					'jurusan'	 		=> $value->jurusan,
+					'jenjang'			=> $value->jenjang,
+					'no_ijazah'			=> $value->no_ijazah,
+					'tahun'		 		=> $value->tahun
+				);
+			}
+		}
+
+        $data['success'] = TRUE;
+        echo json_encode($data);
+	}
+
 	public function savePendidikan(){
 		$uuid         	 = $this->m_profile->getUUID();
+		$id_bio 		 = ($this->input->post('id_bio', TRUE) ? $this->input->post('id_bio', TRUE) : '');
 		$school_name     = ($this->input->post('school_name', TRUE) ? $this->input->post('school_name', TRUE) : '');
 		$jurusan	     = ($this->input->post('jurusan', TRUE) ? $this->input->post('jurusan', TRUE) : '');
 		$jenjang         = ($this->input->post('jenjang', TRUE) ? $this->input->post('jenjang', TRUE) : '');
@@ -226,19 +262,23 @@ class C_profile extends IAN_Controller{
 		if(empty($school_name)){
     		$success = 3;
     	} elseif($this->m_profile->cekData($school_name) == 0){
-    		$this->m_profile->savePendidikan($uuid, $school_name, $jurusan, $jenjang, $no_ijazah, $tahun);
-    		$success = 1;
+    		$this->m_profile->savePendidikan($uuid, $id_bio, $school_name, $jurusan, $jenjang, $no_ijazah, $tahun);
+    		$success 	= 1;
+    		$pesan 		= "Data Pendidikan Berhasil Disimpan";
     	} else {
-    		$success = 2;
+    		$success 	= 2;
+    		$pesan 		= "Data Pendidikan GAGAL DISIMPAN";
     	}
 
     	$data['total'] 		= $success;
     	$data['success'] 	= TRUE;
+    	$data['pesan']		= $pesan;
     	echo json_encode($data);    	
 	}
 
 	public function editPendidikan(){
-		$id 			= ($this->input->post('id', TRUE) ? $this->input->post('id', TRUE) : '');
+		$id 			 = ($this->input->post('id', TRUE) ? $this->input->post('id', TRUE) : '');
+		$id_bio     	 = ($this->input->post('id_bio', TRUE) ? $this->input->post('id_bio', TRUE) : '');
 		$school_name     = ($this->input->post('school_name', TRUE) ? $this->input->post('school_name', TRUE) : '');
 		$jurusan	     = ($this->input->post('jurusan', TRUE) ? $this->input->post('jurusan', TRUE) : '');
 		$jenjang         = ($this->input->post('jenjang', TRUE) ? $this->input->post('jenjang', TRUE) : '');
@@ -247,7 +287,7 @@ class C_profile extends IAN_Controller{
     	if(empty($school_name)){
     		$success = 2;
     	} else {
-    		$this->m_profile->updatePendidikan($id, $school_name, $jurusan, $jenjang, $no_ijazah, $tahun);
+    		$this->m_profile->updatePendidikan($id, $id_bio, $school_name, $jurusan, $jenjang, $no_ijazah, $tahun);
     		$success = 1;
     	}
 
@@ -257,28 +297,75 @@ class C_profile extends IAN_Controller{
 
 	}
 
+	public function delPendidikan(){
+		$id 	= $this->input->post('id');
+		// foreach($data as $row){	    
+	        if($this->m_profile->deletePendidikan($id)){
+	        	$data['msg'] = 0;
+		    } else {
+		    	$data['msg'] = 1;
+		    }
+	    // }
+	    $this->getPendidikan();
+	    echo json_encode($data);
+	}
+
+
+	/*===================== KEAHLIAN SERVER CONTROLLER =====================*/
+
+	public function getKeahlian(){
+		$id_bio = json_decode($this->input->post('post'));
+	    $result = $this->m_profile->getKeahlian($id_bio);
+	    
+	    if($this->m_profile->cekKeahlian($id_bio) == 0){
+	      $data['data'][] = array(        
+			'id' 				=> '',
+			'id_bio'			=> $id_bio,
+			'nama_keahlian'		=> '',
+			'keterangan' 		=> '',
+			'describtion'		=> ''        
+	        );
+	    } else {
+			foreach ($result->result() as $key => $value) {
+				$data['data'][]=array(
+					'id' 				=> $value->id,
+					'id_bio'			=> $value->id_bio,
+					'nama_keahlian'		=> $value->nama_keahlian,
+					'keterangan'		=> $value->keterangan,
+					'describtion'		=> $value->describtion
+				);
+			}
+		}
+
+        $data['success'] = TRUE;
+        echo json_encode($data);
+	}
+
 	public function saveKeahlian(){
 		$uuid         	 = $this->m_profile->getUUID();
+		$id_bio     	 = ($this->input->post('id_bio', TRUE) ? $this->input->post('id_bio', TRUE) : '');
 		$nama_keahlian   = ($this->input->post('nama_keahlian', TRUE) ? $this->input->post('nama_keahlian', TRUE) : '');
-		$keterangan	     = ($this->input->post('jurusan', TRUE) ? $this->input->post('keterangan', TRUE) : '');
+		$keterangan	     = ($this->input->post('keterangan', TRUE) ? $this->input->post('keterangan', TRUE) : '');
 		$describtion     = ($this->input->post('describtion', TRUE) ? $this->input->post('describtion', TRUE) : '');
 
-		if(empty($jobname)){
+		if(empty($nama_keahlian)){
     		$success = 3;
-    	} elseif($this->m_profile->cekData($nama_keahlian) == 0){
-    		$this->m_jobname->saveKeahlian($uuid, $nama_keahlian, $keterangan, $describtion);
-    		$success = 1;
-    	} else {
-    		$success = 2;
+    		$pesan 		= "Data Gagal Disimpan";
+    	} else{
+    		$this->m_profile->saveKeahlian($uuid, $id_bio, $nama_keahlian, $keterangan, $describtion);
+    		$success 	= 1;
+    		$pesan 		= "Data Pendidikan Berhasil Disimpan";
     	}
 
     	$data['total'] 		= $success;
     	$data['success'] 	= TRUE;
+    	$data['pesan'] 		= $pesan;
     	echo json_encode($data);    	
 	}
 
 	public function editKeahlian(){
-		$id 			= ($this->input->post('id', TRUE) ? $this->input->post('id', TRUE) : '');
+		$id 			 = ($this->input->post('id', TRUE) ? $this->input->post('id', TRUE) : '');
+		$id_bio     	 = ($this->input->post('id_bio', TRUE) ? $this->input->post('id_bio', TRUE) : '');
 		$nama_keahlian   = ($this->input->post('nama_keahlian', TRUE) ? $this->input->post('nama_keahlian', TRUE) : '');
 		$keterangan	     = ($this->input->post('jurusan', TRUE) ? $this->input->post('keterangan', TRUE) : '');
 		$describtion     = ($this->input->post('describtion', TRUE) ? $this->input->post('describtion', TRUE) : '');
@@ -286,7 +373,7 @@ class C_profile extends IAN_Controller{
     	if(empty($nama_keahlian)){
     		$success = 2;
     	} else {
-    		$this->m_profile->updateKeahlan($id, $nama_keahlian, $keterangan, $describtion);
+    		$this->m_profile->updateKeahlan($id, $id_bio, $nama_keahlian, $keterangan, $describtion);
     		$success = 1;
     	}
 
@@ -295,8 +382,42 @@ class C_profile extends IAN_Controller{
     	echo json_encode($data);   
 
 	}
+
+	/*===================== PENGALAMAN SERVER CONTROLLER =====================*/
+
+	public function getPengalaman(){
+		$id_bio = json_decode($this->input->post('post'));
+	    $result = $this->m_profile->getPengalaman($id_bio);
+	    
+	    if($this->m_profile->cekPengalaman($id_bio) == 0){
+	      $data['data'][] = array(        
+			'id' 				=> '',
+			'id_bio'			=> $id_bio,
+			'nama_perusahaan'	=> '',
+			'jenis_usaha' 		=> '',
+			'masa_kerja' 		=> '',
+			'alamat' 			=> ''        
+	        );
+	    } else {
+			foreach ($result->result() as $key => $value) {
+				$data['data'][]=array(
+					'id' 				=> $value->id,
+					'id_bio'			=> $value->id_bio,
+					'nama_perusahaan'	=> $value->nama_perusahaan,
+					'jenis_usaha'		=> $value->jenis_usaha,
+					'masa_kerja'		=> $value->masa_kerja,
+					'alamat'			=> $value->alamat
+				);
+			}
+		}
+
+        $data['success'] = TRUE;
+        echo json_encode($data);
+	}
+
 	public function savePengalaman(){
 		$uuid         	 = $this->m_profile->getUUID();
+		$id_bio     	 = ($this->input->post('id_bio', TRUE) ? $this->input->post('id_bio', TRUE) : '');
 		$nama_perusahaan = ($this->input->post('nama_perusahaan', TRUE) ? $this->input->post('nama_perusahaan', TRUE) : '');
 		$jenis_usaha	 = ($this->input->post('jenis_usaha', TRUE) ? $this->input->post('jenis_usaha', TRUE) : '');
 		$masa_kerja      = ($this->input->post('masa_kerja', TRUE) ? $this->input->post('masa_kerja', TRUE) : '');
@@ -305,7 +426,7 @@ class C_profile extends IAN_Controller{
 		if(empty($nama_perusahaan)){
     		$success = 3;
     	} elseif($this->m_profile->cekData($Pengalaman) == 0){
-    		$this->m_profile->savePengalaman($uuid, $nama_perusahaan, $jenis_usaha, $masa_kerja, $alamat);
+    		$this->m_profile->savePengalaman($uuid, $id_bio, $nama_perusahaan, $jenis_usaha, $masa_kerja, $alamat);
     		$success = 1;
     	} else {
     		$success = 2;
@@ -317,7 +438,8 @@ class C_profile extends IAN_Controller{
 	}
 
 	public function editPengalaman(){
-		$id 			= ($this->input->post('id', TRUE) ? $this->input->post('id', TRUE) : '');
+		$id 			 = ($this->input->post('id', TRUE) ? $this->input->post('id', TRUE) : '');
+		$id_bio     	 = ($this->input->post('id_bio', TRUE) ? $this->input->post('id_bio', TRUE) : '');
 		$nama_perusahaan = ($this->input->post('nama_perusahaan', TRUE) ? $this->input->post('nama_perusahaan', TRUE) : '');
 		$jenis_usaha	 = ($this->input->post('jenis_usaha', TRUE) ? $this->input->post('jenis_usaha', TRUE) : '');
 		$masa_kerja      = ($this->input->post('masa_kerja', TRUE) ? $this->input->post('masa_kerja', TRUE) : '');
@@ -326,7 +448,7 @@ class C_profile extends IAN_Controller{
     	if(empty($nama_perusahaan)){
     		$success = 2;
     	} else {
-    		$this->m_profile->updatePengalaman($id, $nama_perusahaan, $jenis_usaha, $masa_kerja, $alamat);
+    		$this->m_profile->updatePengalaman($id, $id_bio, $nama_perusahaan, $jenis_usaha, $masa_kerja, $alamat);
     		$success = 1;
     	}
 
@@ -335,8 +457,44 @@ class C_profile extends IAN_Controller{
     	echo json_encode($data);   
 
 	}
-		public function savePelatihan(){
+	
+	/*===================== PELATIHAN SERVER CONTROLLER =====================*/
+
+	public function getPelatihan(){
+		$id_bio = json_decode($this->input->post('post'));
+	    $result = $this->m_profile->getPelatihan($id_bio);
+	    
+	    if($this->m_profile->cekPelatihan($id_bio) == 0){
+	      $data['data'][] = array(        
+			'id' 				=> '',
+			'id_bio'			=> $id_bio,
+			'materi_pelatihan'	=> '',
+			'no_sertifikat' 	=> '',
+			'penyelenggara' 	=> '',
+			'tempat' 			=> '',
+			'waktu' 			=> ''        
+	        );
+	    } else {
+			foreach ($result->result() as $key => $value) {
+				$data['data'][]=array(
+					'id' 				=> $value->id,
+					'id_bio'			=> $value->id_bio,
+					'materi_pelatihan'	=> $value->nama_perusahaan,
+					'no_sertifikat'		=> $value->jenis_usaha,
+					'penyelenggara'		=> $value->masa_kerja,
+					'tempat'			=> $value->alamat,
+					'waktu'				=> $value->waktu
+				);
+			}
+		}
+
+        $data['success'] = TRUE;
+        echo json_encode($data);
+    }
+
+	public function savePelatihan(){
 		$uuid         	 	= $this->m_profile->getUUID();
+		$id_bio     	 	= ($this->input->post('id_bio', TRUE) ? $this->input->post('id_bio', TRUE) : '');
 		$materi_pelatihan   = ($this->input->post('materi_pelatihan', TRUE) ? $this->input->post('materi_pelatihan', TRUE) : '');
 		$no_sertifikat		= ($this->input->post('no_sertifikat', TRUE) ? $this->input->post('no_sertifikat', TRUE) : '');
 		$penyelenggara      = ($this->input->post('penyelenggara', TRUE) ? $this->input->post('penyelenggara', TRUE) : '');
@@ -346,7 +504,7 @@ class C_profile extends IAN_Controller{
 		if(empty($materi_pelatihan)){
     		$success = 3;
     	} elseif($this->m_profile->cekData($Pelatihan) == 0){
-    		$this->m_profile->savePelatihan($uuid, $materi_pelatihan, $no_sertifikat, $penyelenggara, $waktu);
+    		$this->m_profile->savePelatihan($uuid, $id_bio, $materi_pelatihan, $no_sertifikat, $penyelenggara, $waktu);
     		$success = 1;
     	} else {
     		$success = 2;
@@ -358,7 +516,8 @@ class C_profile extends IAN_Controller{
 	}
 
 	public function editPelatihan(){
-		$id 			= ($this->input->post('id', TRUE) ? $this->input->post('id', TRUE) : '');
+		$id 				= ($this->input->post('id', TRUE) ? $this->input->post('id', TRUE) : '');
+		$id_bio     	 	= ($this->input->post('id_bio', TRUE) ? $this->input->post('id_bio', TRUE) : '');
 		$materi_pelatihan   = ($this->input->post('materi_pelatihan', TRUE) ? $this->input->post('materi_pelatihan', TRUE) : '');
 		$no_sertifikat		= ($this->input->post('no_sertifikat', TRUE) ? $this->input->post('no_sertifikat', TRUE) : '');
 		$penyelenggara      = ($this->input->post('penyelenggara', TRUE) ? $this->input->post('penyelenggara', TRUE) : '');
@@ -368,7 +527,7 @@ class C_profile extends IAN_Controller{
     	if(empty($materi_pelatihan)){
     		$success = 2;
     	} else {
-    		$this->m_jobname->updateJobname($id, $materi_pelatihan, $no_sertifikat, $penyelenggara, $waktu);
+    		$this->m_profile->updateJobname($id, $id_bio, $materi_pelatihan, $no_sertifikat, $penyelenggara, $waktu);
     		$success = 1;
     	}
 
@@ -377,8 +536,41 @@ class C_profile extends IAN_Controller{
     	echo json_encode($data);   
 
 	}
+
+	/*===================== CATATAN SERVER CONTROLLER =====================*/
+
+	public function getCatatan(){
+		$id_bio = json_decode($this->input->post('post'));
+	    $result = $this->m_profile->getCatatan($id_bio);
+	    
+	    if($this->m_profile->cekCatatan($id_bio) == 0){
+	      $data['data'][] = array(        
+			'id' 				=> '',
+			'id_bio'			=> $id_bio,
+			'tanggal'			=> '',
+			'keterangan' 		=> '',
+			'describtion' 		=> ''  
+	        );
+	    } else {
+			foreach ($result->result() as $key => $value) {
+				$data['data'][]=array(
+					'id' 				=> $value->id,
+					'id_bio'			=> $value->id_bio,
+					'tanggal'			=> $value->tanggal,
+					'keterangan'		=> $value->keterangan,
+					'describtion'		=> $value->describtion
+				);
+			}
+		}
+
+        $data['success'] = TRUE;
+        echo json_encode($data);
+	}
+				
+
 	public function saveCatatan(){
 		$uuid         	 	= $this->m_profile->getUUID();
+		$id_bio     	 	= ($this->input->post('id_bio', TRUE) ? $this->input->post('id_bio', TRUE) : '');
 		$tanggal   			= ($this->input->post('tanggal', TRUE) ? $this->input->post('tanggal', TRUE) : '');
 		$keterangan			= ($this->input->post('keterangan', TRUE) ? $this->input->post('keterangan', TRUE) : '');
 		$describtion    	= ($this->input->post('describtion', TRUE) ? $this->input->post('describtion', TRUE) : '');
@@ -386,7 +578,7 @@ class C_profile extends IAN_Controller{
 		if(empty($tanggal)){
     		$success = 3;
     	} elseif($this->m_profile->cekData($Catatan) == 0){
-    		$this->m_profile->saveCatatan($uuid, $tanggal, $keterangan, $describtion);
+    		$this->m_profile->saveCatatan($uuid, $id_bio, $tanggal, $keterangan, $describtion);
     		$success = 1;
     	} else {
     		$success = 2;
@@ -399,6 +591,7 @@ class C_profile extends IAN_Controller{
 
 	public function editCatatan(){
 		$id 			= ($this->input->post('id', TRUE) ? $this->input->post('id', TRUE) : '');
+		$id_bio     	= ($this->input->post('id_bio', TRUE) ? $this->input->post('id_bio', TRUE) : '');
 		$tanggal   		= ($this->input->post('tanggal', TRUE) ? $this->input->post('tanggal', TRUE) : '');
 		$keterangan		= ($this->input->post('keterangan', TRUE) ? $this->input->post('keterangan', TRUE) : '');
 		$describtion    = ($this->input->post('describtion', TRUE) ? $this->input->post('describtion', TRUE) : '');
@@ -406,7 +599,7 @@ class C_profile extends IAN_Controller{
     	if(empty($tanggal)){
     		$success = 2;
     	} else {
-    		$this->m_profile->updateCatatan($id, $tanggal, $keterangan, $describtion);
+    		$this->m_profile->updateCatatan($id, $id_bio, $tanggal, $keterangan, $describtion);
     		$success = 1;
     	}
 

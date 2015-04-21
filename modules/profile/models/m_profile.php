@@ -193,14 +193,44 @@ class M_profile extends CI_Model{
         return $query;
     }
 
-    public function savePendidikan($uuid, $school_name, $jurusan, $jenjang, $no_ijazah, $tahun){
+    /*===================== PENDIDIKAN SERVER MODEL =====================*/
+
+    public function cekPendidikan($id_bio){
+        $this->setConnection('dbsystem');
+        $db = $this->getConnection();
+        return $db->select('COUNT(*) AS id', FALSE)->from('tm_biopendidikan')
+                    ->where('id_bio',$id_bio)
+                    ->get()->row()->id;            
+    }
+
+    public function getPendidikan($id_bio){
+        $this->setConnection('dbsystem');
+        $db = $this->getConnection();
+
+        $db->select("
+            u.id_biopendidikan AS id,
+            u.id_bio AS id_bio,
+            u.school_name AS school_name,
+            u.jurusan AS jurusan,
+            u.jenjang AS jenjang,
+            u.no_ijazah AS no_ijazah,
+            u.tahun AS tahun", FALSE);
+        $db->from('tm_biopendidikan u');
+        $db->where('id_bio', $id_bio);
+        $db->order_by('u.tahun', 'ASC');
+        $query = $db->get();
+        return $query;
+    }
+
+    public function savePendidikan($uuid, $id_bio, $school_name, $jurusan, $jenjang, $no_ijazah, $tahun){
         $this->setConnection('dbsystem');
         $db   = $this->getConnection();
 
         $db->set('id_biopendidikan', $uuid);
+        $db->set('id_bio', $id_bio);
         $db->set('school_name', $school_name);
         $db->set('jurusan', $jurusan);
-        $db->set('level', $jenjang);
+        $db->set('jenjang', $jenjang);
         $db->set('no_ijazah', $no_ijazah);
         $db->set('tahun', $tahun);
         $db->insert('tm_biopendidikan');
@@ -213,36 +243,102 @@ class M_profile extends CI_Model{
         $data = array(
             'school_name'   => $school_name,
             'jurusan'       => $jurusan,
-            'level'         => $jenjang,
+            'jenjang'       => $jenjang,
             'no_ijazah'     => $no_ijazah,
             'tahun'         => $tahun
         );
 
         $db->where('id_biopendidikan', $id);
         $db->update('tm_biopendidikan', $data);
+    }
+
+    public function deletePendidikan($id){
+        $this->setConnection('dbsystem');
+        $db = $this->getConnection();
+        $db->where('id_biopendidikan', $id);
+        $db->delete('tm_biopendidikan');
     }   
-    public function saveKeahlian($uuid, $nama_keahlian, $keterangan, $describtion){
+
+    /*===================== KEAHLIAN SERVER MODEL =====================*/
+
+    public function cekKeahlian($id_bio){
+        $this->setConnection('dbsystem');
+        $db = $this->getConnection();
+        return $db->select('COUNT(*) AS id', FALSE)->from('tm_keahlian')
+                    ->where('id_bio',$id_bio)
+                    ->get()->row()->id;            
+    }
+
+    public function getKeahlian($id_bio){
+        $this->setConnection('dbsystem');
+        $db = $this->getConnection();
+
+        $db->select("
+            u.id_keahlian AS id,
+            u.id_bio AS id_bio,
+            u.nama_keahlian AS nama_keahlian,
+            u.keterangan AS keterangan,
+            u.describtion AS describtion", FALSE);
+        $db->from('tm_keahlian u');
+        $db->where('id_bio', $id_bio);
+        $db->order_by('u.nama_keahlian');
+        $query = $db->get();
+        return $query;
+    }
+
+    public function saveKeahlian($uuid, $id_bio, $nama_keahlian, $keterangan, $describtion){
         $this->setConnection('dbsystem');
         $db   = $this->getConnection();
 
         $db->set('id_keahlian', $uuid);
+        $db->set('id_bio', $id_bio);
         $db->set('nama_keahlian', $nama_keahlian);
         $db->set('describtion', $describtion);
+        $db->set('keterangan', $keterangan);
         $db->insert('tm_keahlian');
     }
 
-    public function updateKeahlian($id, $nama_keahlian, $keterangan, $describtion){
+    public function updateKeahlian($id, $id_bio, $nama_keahlian, $keterangan, $describtion){
         $this->setConnection('dbsystem');
         $db   = $this->getConnection();
 
         $data = array(
             'nama_keahlian' => $nama_keahlian,
+            'keterangan'    => $keterangan,
             'describtion'   => $describtion
         );
 
         $db->where('id_keahlian', $id);
         $db->update('tm_keahlian', $data);
     }  
+
+    /*===================== PENGALAMAN SERVER MODEL =====================*/
+
+    public function cekPengalaman($id_bio){
+        $this->setConnection('dbsystem');
+        $db = $this->getConnection();
+        return $db->select('COUNT(*) AS id', FALSE)->from('tm_pengalaman')
+                    ->where('id_bio',$id_bio)
+                    ->get()->row()->id;            
+    }
+
+    public function getPengalaman($id_bio){
+        $this->setConnection('dbsystem');
+        $db = $this->getConnection();
+
+        $db->select("
+            u.id_pengalaman AS id,
+            u.id_bio AS id_bio,
+            u.nama_perusahaan AS nama_perusahaan,
+            u.jenis_usaha AS jenis_usaha,
+            u.alamat AS alamat", FALSE);
+        $db->from('tm_pengalaman u');
+        $db->where('id_bio', $id_bio);
+        $db->order_by('u.nama_perusahaan');
+        $query = $db->get();
+        return $query;
+    }
+
     public function savePengalaman($uuid, $nama_perusahaan, $jenis_usaha, $masa_kerja, $alamat){
         $this->setConnection('dbsystem');
         $db   = $this->getConnection();
@@ -267,6 +363,35 @@ class M_profile extends CI_Model{
         $db->where('id_pengalaman', $id);
         $db->update('tm_pengalaman', $data);
     }   
+
+    /*===================== PELATIHAN SERVER MODEL =====================*/
+
+     public function cekPelatihan($id_bio){
+        $this->setConnection('dbsystem');
+        $db = $this->getConnection();
+        return $db->select('COUNT(*) AS id', FALSE)->from('tm_pelatihan')
+                    ->where('id_bio',$id_bio)
+                    ->get()->row()->id;            
+    }
+
+    public function getPelatihan($id_bio){
+        $this->setConnection('dbsystem');
+        $db = $this->getConnection();
+
+        $db->select("
+            u.id_pelatihan AS id,
+            u.id_bio AS id_bio,
+            u.no_sertifikat AS no_sertifikat,
+            u.penyelenggara AS penyelenggara,
+            u.tempat AS tempat,
+            u.waktu AS waktu", FALSE);
+        $db->from('tm_pelatihan u');
+        $db->where('id_bio', $id_bio);
+        $db->order_by('u.no_sertifikat');
+        $query = $db->get();
+        return $query;
+    }
+
     public function savePelatihan($uuid, $materi_pelatihan, $no_sertifikat, $penyelenggara, $waktu){
         $this->setConnection('dbsystem');
         $db   = $this->getConnection();
@@ -293,7 +418,35 @@ class M_profile extends CI_Model{
         $db->where('id_pelatihan', $id);
         $db->update('tm_pelatihan', $data);
     }  
-      public function saveCatatan($uuid, $tanggal, $keterangan, $describtion){
+
+    /*===================== CATATAN SERVER MODEL =====================*/
+
+    public function cekCatatan($id_bio){
+        $this->setConnection('dbsystem');
+        $db = $this->getConnection();
+        return $db->select('COUNT(*) AS id', FALSE)->from('tm_catatan')
+                    ->where('id_bio',$id_bio)
+                    ->get()->row()->id;            
+    }
+
+      public function getCatatan($id_bio){
+        $this->setConnection('dbsystem');
+        $db = $this->getConnection();
+
+        $db->select("
+            u.id_catatan AS id,
+            u.id_bio AS id_bio,
+            u.tanggal AS tanggal,
+            u.keterangan AS keterangan,
+            u.describtion AS describtion", FALSE);
+        $db->from('tm_catatan u');
+        $db->where('id_bio', $id_bio);
+        $db->order_by('u.tanggal');
+        $query = $db->get();
+        return $query;
+    }
+
+    public function saveCatatan($uuid, $tanggal, $keterangan, $describtion){
         $this->setConnection('dbsystem');
         $db   = $this->getConnection();
 
@@ -303,7 +456,7 @@ class M_profile extends CI_Model{
         $db->set('describtion', $describtion);
     }
 
-    public function updatePelatihan($id, $tanggal, $keterangan, $describtion){
+    public function updateCatatan($id, $tanggal, $keterangan, $describtion){
         $this->setConnection('dbsystem');
         $db   = $this->getConnection();
 

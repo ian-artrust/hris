@@ -1,12 +1,10 @@
 Ext.define('SMS.module.Employee.Profile.view.grid.GridProfile', {
     extend   : 'Ext.grid.Panel',
     store    : 'SMS.module.Employee.Profile.store.Profile',
-    title    : 'Grid Profile',
-    iconCls  : 'icon-grid',
     alias    : 'widget.gridprofile',
     id       : 'gridprofile',
     border   : true,
-    frame    : true,
+    frame    : false,
     margins     : '3px', 
     selModel: {
         selType     : 'checkboxmodel',

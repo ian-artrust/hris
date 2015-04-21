@@ -5,46 +5,188 @@ Ext.define('SMS.module.Employee.Profile.controller.Profile', {
     init: function() {
         var me = this;
         me.getStore('SMS.module.Employee.Profile.store.Profile').load();
+        me.getStore('SMS.module.Employee.Profile.store.Pendidikan').load();
+        me.getStore('SMS.module.Employee.Profile.store.Keahlian').load();
         me.control({
-            "gridprofile button[action=delete]"          : {
+            "gridprofile button[action=delete]"     : {
                 click: me.del
             }, 
-            "#gridprofile"                                 : {
-               itemclick: me.viewProfile
+            "#gridprofile"                          : {
+               select : me.viewProfile
             },            
-            "formprofile button[action=save]"        : {
+            "formprofile button[action=save]"       : {
                 click: me.save
             }, 
-            "biography button[action=reset]"       : {
+            "biography button[action=reset]"        : {
                 click: me.reset
             },
-            "gridprofile"                          : {
+            "pendidikan button[action=reset]"       : {
+                click: me.reset
+            },
+            "keahlian button[action=reset]"       : {
+                click: me.reset
+            },
+            "gridprofile"                           : {
                itemdblclick: me.addorg
             },
-            "gridprofiletextfield[action=search]"    : {
+            "gridprofiletextfield[action=search]"   : {
                keypress: me.search
             },
-            "gridprofilebutton[action=print]"        : {
+            "gridprofilebutton[action=print]"       : {
                click: me.print
             },
-            "formprofilebutton[action=update]"       : {
+            "formprofilebutton[action=update]"      : {
                click: me.update
             }
         });
         me.callParent(arguments);
     },
+
     reloadStore: function(){
         var me = this;
         me.getStore('SMS.module.Employee.Profile.store.Profile').reload();
     },
+
     viewProfile: function(grid, record, item, index, e, eOpts){
-        var id = record.data.id;
-        var form = Ext.getCmp('biography');
-        var grid = Ext.getCmp('gridprofile');
+        var me      = this;
+        var id      = record.data.id;
+        var form    = Ext.getCmp('biography');
+        var grid    = Ext.getCmp('gridprofile');
         form.getForm().setValues(record.data);
         var pic     = form.queryById('imagePreview');
         pic.setSrc(record.data.userfile);
         form.getForm().setValues(record.data);
+
+        /*====== Load Data Pendidikan ======*/
+        var form = Ext.getCmp('pendidikan');
+        var grid = Ext.getCmp('gridpendidikan');
+        form.getForm().setValues(record.data);
+
+        var id_bio =  record.data.id;
+        Ext.Ajax.request({
+            url             : BASE_URL + 'profile/c_profile/getPendidikan',
+            method          : 'POST',
+            params          : {post : Ext.encode(id_bio)},
+            success         : function(response){
+                var data    = Ext.JSON.decode(response.responseText);
+                var storeMenu = Ext.getStore('SMS.module.Employee.Profile.store.Pendidikan');
+                storeMenu.loadData([],false);
+                // storeMenu.removeAll();
+                storeMenu.add(data.data);
+            }
+        });
+
+        /*====== Load Data Keahlian ======*/
+        var form = Ext.getCmp('keahlian');
+        var grid = Ext.getCmp('gridkeahlian');
+        form.getForm().setValues(record.data);
+
+        var id_bio = record.data.id_bio;
+        Ext.Ajax.request({
+            url             : BASE_URL + 'profile/c_profile/getKeahlian',
+            method          : 'POST',
+            params          : {post : Ext.encode(id_bio)},
+            success         : function(response){
+                var data    = Ext.JSON.decode(response.responseText);
+                var storeMenu = Ext.getStore('SMS.module.Employee.Profile.store.Keahlian');
+                storeMenu.loadData([],false);
+                storeMenu.add(data.data);
+            }
+        });
+    },
+
+    viewPendidikan : function(grid, record, item, index, e, eOpts){
+        var form = Ext.getCmp('pendidikan');
+        var grid = Ext.getCmp('gridpendidikan');
+        form.getForm().setValues(record.data);
+
+        var id_bio =  record.data.id;
+        Ext.Ajax.request({
+            url             : BASE_URL + 'profile/c_profile/getPendidikan',
+            method          : 'POST',
+            params          : {post : Ext.encode(id_bio)},
+            success         : function(response){
+                var data    = Ext.JSON.decode(response.responseText);
+                var storeMenu = Ext.getStore('SMS.module.Employee.Profile.store.Pendidikan');
+                storeMenu.loadData([],false);
+                // storeMenu.removeAll();
+                storeMenu.add(data.data);
+            }
+        });
+    },
+
+    viewKeahlian : function(grid, record, item, index, e, eOpts){
+        var form = Ext.getCmp('keahlian');
+        var grid = Ext.getCmp('gridprofile');
+        form.getForm().setValues(record.data);
+
+        var id_bio = record.data.id_bio;
+        Ext.Ajax.request({
+            url             : BASE_URL + 'profile/c_profile/getKeahlian',
+            method          : 'POST',
+            params          : {post : Ext.encode(id_bio)},
+            success         : function(response){
+                var data    = Ext.JSON.decode(response.responseText);
+                var storeMenu = Ext.getStore('SMS.module.Employee.Profile.store.Keahlian');
+                storeMenu.loadData([],false);
+                storeMenu.add(data.data);
+            }
+        });
+    },
+
+    viewPengalaman : function(grid, record, item, index, e, eOpts){
+        var form = Ext.getCmp('pengalaman');
+        var grid = Ext.getCmp('gridprofile');
+        form.getForm().setValues(record.data);
+
+        var id_bio = record.data.id_bio;
+        Ext.Ajax.request({
+            url             : BASE_URL + 'profile/c_profile/getPengalaman',
+            method          : 'POST',
+            params          : {post : Ext.encode(id_bio)},
+            success         : function(response){
+                var data    = Ext.JSON.decode(response.responseText);
+                var storeMenu = Ext.getStore('SMS.module.Employee.Profile.store.Pengalaman');
+                storeMenu.loadData([],false);
+                storeMenu.add(data.data);
+            }
+        });
+    },
+     viewPelatihan : function(grid, record, item, index, e, eOpts){
+        var form = Ext.getCmp('pelatihan');
+        var grid = Ext.getCmp('gridprofile');
+        form.getForm().setValues(record.data);
+
+        var id_bio = record.data.id_bio;
+        Ext.Ajax.request({
+            url             : BASE_URL + 'profile/c_profile/getPelatihan',
+            method          : 'POST',
+            params          : {post : Ext.encode(id_bio)},
+            success         : function(response){
+                var data    = Ext.JSON.decode(response.responseText);
+                var storeMenu = Ext.getStore('SMS.module.Employee.Profile.store.Pelatihan');
+                storeMenu.loadData([],false);
+                storeMenu.add(data.data);
+            }
+        });
+    },
+     viewCatatan : function(grid, record, item, index, e, eOpts){
+        var form = Ext.getCmp('catatan');
+        var grid = Ext.getCmp('gridprofile');
+        form.getForm().setValues(record.data);
+
+        var id_bio = record.data.id_bio;
+        Ext.Ajax.request({
+            url             : BASE_URL + 'profile/c_profile/getCatatan',
+            method          : 'POST',
+            params          : {post : Ext.encode(id_bio)},
+            success         : function(response){
+                var data    = Ext.JSON.decode(response.responseText);
+                var storeMenu = Ext.getStore('SMS.module.Employee.Profile.store.Catatan');
+                storeMenu.loadData([],false);
+                storeMenu.add(data.data);
+            }
+        });
     },
 
     del: function(gridPanel, selected){
@@ -102,24 +244,19 @@ Ext.define('SMS.module.Employee.Profile.controller.Profile', {
 
     reset: function(btn, gridPanel, selected) {//Reset Form
         var me = this;
-        var form = Ext.getCmp('biography');
-        var grid = Ext.getCmp('gridprofile');
+        var form            = Ext.getCmp('biography');
+        var formpendidikan  = Ext.getCmp('pendidikan');
+        var grid            = Ext.getCmp('gridprofile');
+        var gridpendidikan  = Ext.getCmp('gridpendidikan');
         var pic     = form.queryById('imagePreview');
         pic.setSrc('');
         form.getForm().reset();
+        formpendidikan.getForm().reset();
 
-        if(createProfile == false){
-            var saveButton = form.down('button[action=save]');
-            saveButton.setDisabled(false);
-        }else{
-            var saveButton = form.down('button[action=save]');
-            saveButton.setDisabled(true);
-        }
-
-        var updateButton = form.down('button[action=update]');
-        updateButton.setDisabled(true);
         grid.getSelectionModel().clearSelections();
+        gridpendidikan.getSelectionModel().clearSelections();
         me.getStore('SMS.module.Employee.Profile.store.Profile').reload();
+        me.getStore('SMS.module.Employee.Profile.store.Pendidikan').reload();
 
     },
     save: function(btn, evt, opts){

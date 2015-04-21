@@ -54,8 +54,8 @@ class C_role extends IAN_Controller
             'isupdate'    => $value->isupdate,         
             'isdelete'    => $value->isdelete,          
             'isprocess'   => $value->isprocess          
-            );
-        }
+          );
+      }
     }
         $data['success'] = TRUE;
         echo json_encode($data);
